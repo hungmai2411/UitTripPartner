@@ -1,0 +1,93 @@
+{
+  "project_info": {
+    "project_number": "208595860126",
+    "firebase_url": "https://travel-81548-default-rtdb.firebaseio.com",
+    "project_id": "travel-81548",
+    "storage_bucket": "travel-81548.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:208595860126:android:649cf3087b6ab72546998f",
+        "android_client_info": {
+          "package_name": "com.travelappproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "208595860126-70n3hcpnp01dagos4717gpmdmer7iq7o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.travelappproject",
+            "certificate_hash": "a1342590c849d526f7c069891c5efbe51b413137"
+          }
+        },
+        {
+          "client_id": "208595860126-eck95egq9lghrjpmv9thtadq490mdipo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.travelappproject",
+            "certificate_hash": "56dd02d2076c76e92fd39cfad6685cd9da3b6795"
+          }
+        },
+        {
+          "client_id": "208595860126-qrtmcjom6q72fp55e928v5l6f1hvgvck.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.travelappproject",
+            "certificate_hash": "e554d110296d2c492c453a6344cb1a865081aa47"
+          }
+        },
+        {
+          "client_id": "208595860126-qntkok3ud18to6ql0v55tjdfcrc8n6nn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB36pGICak-jrDOkYYLJF335g3iG9xDzGI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "208595860126-01grgtr12e7367v89f4n84b385trqe23.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:208595860126:android:362271a9a16dc85846998f",
+        "android_client_info": {
+          "package_name": "com.uittrippartner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "208595860126-qntkok3ud18to6ql0v55tjdfcrc8n6nn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB36pGICak-jrDOkYYLJF335g3iG9xDzGI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "208595860126-01grgtr12e7367v89f4n84b385trqe23.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
