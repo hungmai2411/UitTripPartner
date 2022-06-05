@@ -30,21 +30,50 @@
             android:textSize="22dp"
             android:textStyle="bold" />
 
-        <RelativeLayout
-            android:layout_marginHorizontal="10dp"
-            android:layout_marginTop="8dp"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="10dp"
             android:layout_height="wrap_content">
             <TextView
-                android:id="@+id/txtPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="Số lượng phòng: "
+                android:textColor="@color/black"
+                android:textSize="20dp"
+                />
+
+            <TextView
+                android:id="@+id/txtNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="5"
+                android:textColor="@color/black"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_marginHorizontal="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:text="600 000"
-                android:textColor="@color/black"
-                android:textSize="18dp"
-                android:textStyle="bold" />
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/txtPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="600 000"
+                    android:textColor="@color/black"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
 
             <LinearLayout
                 android:layout_alignParentRight="true"
@@ -58,7 +87,7 @@
                     android:scaleType="centerCrop"
                     app:tint="@color/black"
                     android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_edit"/>
+                    android:src="@drawable/ic_action_edit"/>
 
                 <ImageView
                     android:id="@+id/btnDelete"
