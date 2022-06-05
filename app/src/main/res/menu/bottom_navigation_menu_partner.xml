@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/pageRoom"
+        android:enabled="true"
+        android:icon="@drawable/bed"
+        android:title="Home"/>
+    <item
+        android:id="@+id/pageStatistic"
+        android:enabled="true"
+        android:icon="@drawable/trend"
+        android:title="Statistic"/>
+    <item
+        android:id="@+id/pageBooking"
+        android:enabled="true"
+        android:icon="@drawable/booking"
+        android:title="Booking"/>
+    <item
+        android:id="@+id/pageProfile"
+        android:enabled="true"
+        android:icon="@drawable/user"
+        android:title="Profile"/>
+</menu>

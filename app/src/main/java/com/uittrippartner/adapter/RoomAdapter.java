@@ -3,6 +3,7 @@ package com.uittrippartner.adapter;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,8 +65,8 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.RoomViewHolder
         holder.txtTypeRoom.setText(mList.get(position).getName());
         Glide.with(mContext).load(mList.get(position).getPhotos().get(0).getRoomImage()).into(holder.imgRoom);
         holder.txtPrice.setText(new HandleCurrency().handle(mList.get(position).getPrice()));
-
-        Button Okay = mDialog.findViewById(R.id.btn_okay);
+        holder.txtNumber.setText(String.valueOf(mList.get(position).getNumber()));
+        Button Okay = mDialog.findViewById(R.id.btn_okey);
         Button Cancel = mDialog.findViewById(R.id.btn_cancel);
 
         holder.btnDelete.setOnClickListener(new View.OnClickListener() {
@@ -89,6 +90,7 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.RoomViewHolder
                                 .addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
+                                        Log.d("err",e.toString());
                                     }
                                 });
                     }
@@ -106,7 +108,7 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.RoomViewHolder
         holder.btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mFireStore.collection("Hotels/" + 1017 + "/rooms").document(String.valueOf(mList.get(position).getId()))
+                mFireStore.collection("Hotels/" + 1428 + "/rooms").document(String.valueOf(mList.get(position).getId()))
                         .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -157,7 +159,7 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.RoomViewHolder
     }
 
     public class RoomViewHolder extends RecyclerView.ViewHolder{
-        TextView txtTypeRoom;
+        TextView txtTypeRoom, txtNumber;
         TextView txtPrice;
         ShapeableImageView imgRoom;
         LinearLayout layout;
@@ -166,6 +168,7 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.RoomViewHolder
         public RoomViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            txtNumber = itemView.findViewById(R.id.txtNumber);
             btnEdit = itemView.findViewById(R.id.btnEdit);
             btnDelete = itemView.findViewById(R.id.btnDelete);
             txtTypeRoom = itemView.findViewById(R.id.txtType);

@@ -220,7 +220,6 @@ public class AddRoomActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     private void updateFireStore(String nameRoom, String policy, String facility, long price, long size, long number, List<Photo> list) {
@@ -245,7 +244,7 @@ public class AddRoomActivity extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-
+                        Log.d("err",e.getMessage());
                     }
                 });
     }
