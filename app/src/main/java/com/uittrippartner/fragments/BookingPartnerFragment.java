@@ -23,6 +23,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.uittrippartner.R;
+import com.uittrippartner.activities.BookingDetailActivity;
 import com.uittrippartner.adapter.BookingPartnerAdapter;
 import com.uittrippartner.hotel.Booking;
 
@@ -35,7 +36,7 @@ public class BookingPartnerFragment extends Fragment {
     RecyclerView rcvBookings;
     BookingPartnerAdapter bookingPartnerAdapter;
     List<Booking> bookingList = new ArrayList<>();
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseFirestore db;
 
     public BookingPartnerFragment() {
     }
@@ -47,7 +48,7 @@ public class BookingPartnerFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        db = FirebaseFirestore.getInstance();
     }
 
     @Override
@@ -67,7 +68,7 @@ public class BookingPartnerFragment extends Fragment {
             public void onCallBack(Booking booking) {
                 Intent intent = new Intent(getContext(), BookingDetailActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("booking",booking);
+                bundle.putSerializable("booking", booking);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -99,7 +100,7 @@ public class BookingPartnerFragment extends Fragment {
                                             bookingList.add(booking);
                                             break;
                                         case REMOVED:
-                                            Log.d("tag",document.getId());
+                                            Log.d("tag", document.getId());
                                             removeBooking(document.getId());
                                             break;
                                     }
@@ -113,7 +114,7 @@ public class BookingPartnerFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
         rcvBookings.setLayoutManager(linearLayoutManager);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(rcvBookings.getContext(), DividerItemDecoration.VERTICAL);
-        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(),R.drawable.divider));
+        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.divider));
         rcvBookings.addItemDecoration(dividerItemDecoration);
 
         bookingPartnerAdapter.addData(bookingList);
@@ -121,10 +122,14 @@ public class BookingPartnerFragment extends Fragment {
     }
 
     private void removeBooking(String id) {
-        for(Booking booking : bookingList){
-            if(booking.getIdBooking().equals(id)){
-                bookingList.remove(booking);
+        List<Booking> list = new ArrayList<>();
+
+        for (Booking booking : bookingList) {
+            if (booking.getIdBooking().equals(id)) {
+                list.add(booking);
             }
         }
+
+        bookingList.removeAll(list);
     }
 }
