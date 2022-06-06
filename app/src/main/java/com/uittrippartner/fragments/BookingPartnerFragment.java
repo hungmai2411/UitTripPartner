@@ -1,6 +1,8 @@
 package com.uittrippartner.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +16,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.uittrippartner.R;
+import com.uittrippartner.activities.BookingDetailActivity;
 import com.uittrippartner.adapter.BookingPartnerAdapter;
 import com.uittrippartner.hotel.Booking;
 
@@ -32,7 +36,7 @@ public class BookingPartnerFragment extends Fragment {
     RecyclerView rcvBookings;
     BookingPartnerAdapter bookingPartnerAdapter;
     List<Booking> bookingList = new ArrayList<>();
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseFirestore db;
 
     public BookingPartnerFragment() {
     }
@@ -44,7 +48,7 @@ public class BookingPartnerFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        db = FirebaseFirestore.getInstance();
     }
 
     @Override
@@ -62,7 +66,11 @@ public class BookingPartnerFragment extends Fragment {
         bookingPartnerAdapter = new BookingPartnerAdapter(getContext(), new BookingPartnerAdapter.IClickBookingListener() {
             @Override
             public void onCallBack(Booking booking) {
-
+                Intent intent = new Intent(getContext(), BookingDetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("booking", booking);
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
 
@@ -74,13 +82,28 @@ public class BookingPartnerFragment extends Fragment {
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                         if (error == null) {
                             if (!value.isEmpty()) {
-                                for (QueryDocumentSnapshot document : value) {
+                                for (DocumentChange dc : value.getDocumentChanges()) {
+                                    QueryDocumentSnapshot document = dc.getDocument();
+
                                     Booking booking = document.toObject(Booking.class);
                                     Timestamp timestamp = (Timestamp) document.get("timestamp");
                                     Date date = timestamp.toDate();
                                     booking.setDate(date);
                                     booking.setIdBooking(document.getId());
-                                    bookingList.add(booking);
+
+                                    switch (dc.getType()) {
+                                        case ADDED:
+                                            bookingList.add(booking);
+                                            break;
+                                        case MODIFIED:
+                                            removeBooking(document.getId());
+                                            bookingList.add(booking);
+                                            break;
+                                        case REMOVED:
+                                            Log.d("tag", document.getId());
+                                            removeBooking(document.getId());
+                                            break;
+                                    }
                                 }
                             }
                             bookingPartnerAdapter.notifyDataSetChanged();
@@ -91,11 +114,22 @@ public class BookingPartnerFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
         rcvBookings.setLayoutManager(linearLayoutManager);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(rcvBookings.getContext(), DividerItemDecoration.VERTICAL);
-        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(),R.drawable.divider));
+        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.divider));
         rcvBookings.addItemDecoration(dividerItemDecoration);
 
         bookingPartnerAdapter.addData(bookingList);
         rcvBookings.setAdapter(bookingPartnerAdapter);
+    }
 
+    private void removeBooking(String id) {
+        List<Booking> list = new ArrayList<>();
+
+        for (Booking booking : bookingList) {
+            if (booking.getIdBooking().equals(id)) {
+                list.add(booking);
+            }
+        }
+
+        bookingList.removeAll(list);
     }
 }

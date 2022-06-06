@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -36,6 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RoomFragment extends Fragment {
+    private static final String TAG = "Room Fragment";
     Toolbar toolbar;
     RecyclerView rcvRooms;
     RoomAdapter roomAdapter;
@@ -100,7 +103,9 @@ public class RoomFragment extends Fragment {
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                         if (error == null) {
                             if (!value.isEmpty()) {
-                                for (QueryDocumentSnapshot document : value) {
+                                for (DocumentChange dc : value.getDocumentChanges()) {
+                                    QueryDocumentSnapshot document = dc.getDocument();
+
                                     Room room = new Room();
 
                                     List<Photo> list = (List<Photo>) document.get("photos");
@@ -124,8 +129,19 @@ public class RoomFragment extends Fragment {
                                     room.setPhotos(listTmp);
                                     room.setPrice((Long) document.get("price"));
 
-                                    if(!checkExist(document.getId())){
-                                        roomList.add(room);
+                                    switch (dc.getType()) {
+                                        case ADDED:
+                                            roomList.add(room);
+                                            break;
+                                        case MODIFIED:
+                                            editRoom(document.getId());
+                                            roomList.add(room);
+                                            Log.d(TAG,"modified");
+                                            break;
+                                        case REMOVED:
+                                            editRoom(document.getId());
+                                            roomAdapter.notify();
+                                            break;
                                     }
                                 }
                             }
@@ -135,13 +151,11 @@ public class RoomFragment extends Fragment {
                     }
                 });
 
-
         roomAdapter.setData(roomList);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
         rcvRooms.setLayoutManager(linearLayoutManager);
         rcvRooms.setAdapter(roomAdapter);
     }
-
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
@@ -160,12 +174,15 @@ public class RoomFragment extends Fragment {
         return true;
     }
 
-    private boolean checkExist(String id){
+    private void editRoom(String id){
+        List<Room> listTmp = new ArrayList<>();
+
         for(Room room : roomList){
             if(room.getId().equals(id)){
-                return true;
+                listTmp.add(room);
             }
         }
-        return false;
+
+        roomList.removeAll(listTmp);
     }
 }

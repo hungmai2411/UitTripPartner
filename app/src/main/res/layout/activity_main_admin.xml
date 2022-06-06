@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:background="@color/background"
     android:layout_height="match_parent"
-    tools:context=".activities.MainPartnerActivity">
+    tools:context=".activities.MainAdminActivity">
 
     <androidx.fragment.app.FragmentContainerView
         android:layout_width="match_parent"
@@ -24,5 +24,5 @@
         app:itemIconSize="25dp"
         app:itemIconTint="@drawable/item_navigation_selector"
         app:labelVisibilityMode="unlabeled"
-        app:menu="@menu/bottom_navigation_menu_partner" />
+        app:menu="@menu/bottom_navigation_menu_admin" />
 </RelativeLayout>
