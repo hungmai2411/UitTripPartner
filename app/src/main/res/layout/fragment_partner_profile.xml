@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragments.PartnerProfileFragment"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:padding="20dp"
+        android:background="#79dae8">
+
+        <ImageView
+            android:id="@+id/imgProfile"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/company_profile" />
+
+        <TextView
+            android:id="@+id/txtCompanyName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/imgProfile"
+            android:fontFamily="serif"
+            android:includeFontPadding="false"
+            android:text="Mira Hotel"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtCompanyEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtCompanyName"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/imgProfile"
+            android:fontFamily="serif"
+            android:includeFontPadding="false"
+            android:text="mira@gmail.com"
+            android:textSize="14sp" />
+        <LinearLayout
+            android:layoutDirection="rtl"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageButton
+                android:background="?attr/actionBarItemBackground"
+                android:src="@drawable/ic_more48"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:layout_marginTop="-100dp">
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="0dp"
+            android:layout_height="125dp"
+            android:layout_weight="1"
+            android:layout_margin="10dp"
+            app:cardBackgroundColor="#e8f9fd"
+            app:cardElevation="10dp">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="5dp">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/ic_revenue" />
+                <TextView
+                    android:id="@+id/txtRevenue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="100000000 VND"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:fontFamily="serif"
+                    android:layout_centerInParent="true"/>
+                <TextView
+                    android:includeFontPadding="false"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/txtRevenue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Revenue"
+                    android:textSize="14sp"
+                    android:fontFamily="serif"
+                    android:layout_centerInParent="true"/>
+            </RelativeLayout>
+        </com.google.android.material.card.MaterialCardView>
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="0dp"
+            android:layout_height="125dp"
+            android:layout_weight="1"
+            android:layout_margin="10dp"
+            app:cardBackgroundColor="#e8f9fd"
+            app:cardElevation="10dp">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="5dp">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/ic_hotel2" />
+                <TextView
+                    android:id="@+id/txtAmountBooked"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="50"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:fontFamily="serif"
+                    android:layout_centerInParent="true"/>
+                <TextView
+                    android:includeFontPadding="false"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/txtAmountBooked"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Booked rooms"
+                    android:textSize="14sp"
+                    android:fontFamily="serif"
+                    android:layout_centerInParent="true"/>
+            </RelativeLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="20dp">
+        <TextView
+            android:id="@+id/txtName"
+            android:drawablePadding="10dp"
+            android:fontFamily="serif"
+            android:gravity="center_vertical"
+            android:text="Mira Hotel"
+            android:textSize="17sp"
+            android:drawableStart="@drawable/ic_business_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/txtEmail"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="6dp"
+            android:drawablePadding="15dp"
+            android:fontFamily="serif"
+            android:gravity="center_vertical"
+            android:text="mira@gmail.com"
+            android:textSize="17sp"
+            android:drawableStart="@drawable/ic_email48"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/txtPhoneNumber"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="6dp"
+            android:drawablePadding="15dp"
+            android:fontFamily="serif"
+            android:gravity="center_vertical"
+            android:text="0912345678"
+            android:textSize="17sp"
+            android:drawableStart="@drawable/ic_phone48"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/txtLocation"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="4dp"
+            android:drawablePadding="7dp"
+            android:fontFamily="serif"
+            android:gravity="center_vertical"
+            android:text="Ấp 9, Phước Long, Huyện Giồng Trôm, Bến Tre"
+            android:textSize="17sp"
+            android:drawableStart="@drawable/ic_location64"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:layout_marginTop="15dp"
+            android:layout_gravity="center_horizontal"
+            android:textStyle="bold"
+            android:fontFamily="serif"
+            android:textSize="17sp"
+            android:text="For more information"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+    <LinearLayout
+        android:gravity="center_horizontal"
+        android:layout_marginTop="7dp"
+        android:layout_toRightOf="@id/imgProfile"
+        android:layout_below="@id/txtCompanyEmail"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageButton
+            android:id="@+id/btnFacebook"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/actionBarItemBackground"
+            android:src="@drawable/ic_fb48" />
+        <ImageButton
+            android:id="@+id/btnGmail"
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/actionBarItemBackground"
+            android:src="@drawable/ic_gmail48" />
+    </LinearLayout>
+
+</LinearLayout>
