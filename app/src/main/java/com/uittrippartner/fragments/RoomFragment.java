@@ -175,10 +175,14 @@ public class RoomFragment extends Fragment {
     }
 
     private void editRoom(String id){
+        List<Room> listTmp = new ArrayList<>();
+
         for(Room room : roomList){
             if(room.getId().equals(id)){
-                roomList.remove(room);
+                listTmp.add(room);
             }
         }
+
+        roomList.removeAll(listTmp);
     }
 }
