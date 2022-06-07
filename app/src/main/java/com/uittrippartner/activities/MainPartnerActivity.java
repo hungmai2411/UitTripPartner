@@ -12,6 +12,7 @@ import com.google.android.material.navigation.NavigationBarView;
 
 import com.uittrippartner.R;
 import com.uittrippartner.fragments.BookingPartnerFragment;
+import com.uittrippartner.fragments.PartnerProfileFragment;
 import com.uittrippartner.fragments.RoomFragment;
 import com.uittrippartner.fragments.StatisticFragment;
 
@@ -40,9 +41,9 @@ public class MainPartnerActivity extends AppCompatActivity {
                     case R.id.pageStatistic:
                         fragment = new StatisticFragment();
                         break;
-//                    case R.id.pageProfile:
-//                        fragment = new ProfileFragment();
-//                        break;
+                    case R.id.pageProfile:
+                        fragment = new PartnerProfileFragment();
+                        break;
                     case R.id.pageBooking:
                         fragment = new BookingPartnerFragment();
                         break;
