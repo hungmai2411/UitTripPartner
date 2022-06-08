@@ -39,13 +39,13 @@ public class VoucherAdapter extends RecyclerView.Adapter<VoucherAdapter.VoucherV
 
     @Override
     public void onBindViewHolder(@NonNull VoucherViewHolder holder, int position) {
-        holder.txtTitle.setText(String.valueOf(voucherList.get(position).getNumber()));
+        holder.txtTitle.setText("Discount " + voucherList.get(position).getNumber() + " %");
         holder.txtCode.setText(voucherList.get(position).getCode());
 
         Date date = voucherList.get(position).getEndDate();
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         String strDate = dateFormat.format(date);
-        holder.txtHSD.setText(strDate);
+        holder.txtEndDate.setText(strDate);
         holder.txtDescription.setText(voucherList.get(position).getDescription());
     }
 
@@ -57,7 +57,7 @@ public class VoucherAdapter extends RecyclerView.Adapter<VoucherAdapter.VoucherV
     }
 
     public class VoucherViewHolder extends RecyclerView.ViewHolder{
-        TextView txtTitle,txtDescription,txtHSD,txtCode;
+        TextView txtTitle,txtDescription,txtEndDate,txtCode;
 
 
         public VoucherViewHolder(@NonNull View itemView) {
@@ -66,7 +66,7 @@ public class VoucherAdapter extends RecyclerView.Adapter<VoucherAdapter.VoucherV
             txtTitle = itemView.findViewById(R.id.txtTitle);
             txtDescription = itemView.findViewById(R.id.txtDescription);
             txtCode = itemView.findViewById(R.id.txtCode);
-            txtHSD = itemView.findViewById(R.id.txtHSD);
+            txtEndDate = itemView.findViewById(R.id.txtEndDate);
         }
     }
 }
