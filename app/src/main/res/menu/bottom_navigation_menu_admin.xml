@@ -6,4 +6,16 @@
         android:enabled="true"
         android:icon="@drawable/ic_people"
         android:title="Participants"/>
+
+    <item
+        android:id="@+id/pageBanners"
+        android:enabled="true"
+        android:icon="@drawable/advertisement"
+        android:title="Banners"/>
+
+    <item
+        android:id="@+id/pageVouchers"
+        android:enabled="true"
+        android:icon="@drawable/coupon"
+        android:title="Vouchers"/>
 </menu>

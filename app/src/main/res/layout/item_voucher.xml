@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="horizontal"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="200dp"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_marginBottom="10dp"
+    android:orientation="horizontal">
 
     <com.vipulasri.ticketview.TicketView
         android:id="@+id/ticketView2"
@@ -25,27 +26,42 @@
         app:ticketShowBorder="true" />
 
     <com.mikhaellopez.circularimageview.CircularImageView
-        android:elevation="12dp"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_marginStart="35dp"
         android:layout_marginTop="40dp"
+        android:elevation="12dp"
         android:src="@drawable/img_test"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/txtTitle"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="160dp"
-        android:fontFamily="@font/buenard_bold"
-        android:text="Discount 30%"
-        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.575"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/buenard_bold"
+            android:text="Discount"
+            android:layout_gravity="center_vertical"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/txtTitle"
+            android:layout_marginLeft="5dp"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/buenard_bold"
+            android:text="30%"
+            android:textSize="20sp" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/txtDescription"

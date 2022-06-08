@@ -99,7 +99,6 @@ public class StatisticFragment extends Fragment {
         txtDate.setText(content);
 
         db.collection("Hotels/" + 1428 + "/booked")
-                .whereEqualTo("startDate", startDate)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -109,7 +108,10 @@ public class StatisticFragment extends Fragment {
                                 String end =  DateFormat.format("dd/MM", new Date(document.getLong("endDate"))).toString();
                                 String endTmp = DateFormat.format("dd/MM", new Date(endDate)).toString();
 
-                                if (end.equals(endTmp)) {
+                                String start =  DateFormat.format("dd/MM", new Date(document.getLong("startDate"))).toString();
+                                String startTmp = DateFormat.format("dd/MM", new Date(startDate)).toString();
+
+                                if (end.equals(endTmp) && start.equals(startTmp)) {
                                     if (document.getString("status").equals("Booked"))
                                         numberBooked++;
                                     else
