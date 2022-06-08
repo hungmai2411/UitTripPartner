@@ -29,6 +29,7 @@ android {
     buildFeatures {
         viewBinding true
     }
+
 }
 
 dependencies {
@@ -62,4 +63,9 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
     implementation 'io.github.thang-uit:toastperfectlibrary:1.0.1'
+
+    implementation 'com.vipulasri:ticketview:1.1.2'
+
+    implementation 'com.mikhaellopez:circularimageview:3.2.0'
+
 }
