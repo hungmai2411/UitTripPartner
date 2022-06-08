@@ -58,29 +58,12 @@ public class LoginActivity extends AppCompatActivity {
                                             });
 
                                 } else {
+                                    Log.d("err","err");
                                 }
                             }
                         });
             }
         });
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null) {
-            db.collection("partners").document(currentUser.getUid()).get()
-                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            String role = task.getResult().getString("role");
-
-                            updateUI(role);
-                        }
-                    });
-        }
     }
 
     private void updateUI(String role) {

@@ -62,10 +62,14 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
+    implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
+
+
     implementation 'io.github.thang-uit:toastperfectlibrary:1.0.1'
 
     implementation 'com.vipulasri:ticketview:1.1.2'
 
     implementation 'com.mikhaellopez:circularimageview:3.2.0'
+
 
 }
