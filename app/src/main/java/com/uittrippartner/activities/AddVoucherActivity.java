@@ -137,6 +137,7 @@ public class AddVoucherActivity extends AppCompatActivity {
                                             HashMap<String,Object> notiMap = new HashMap<>();
                                             notiMap.put("timestamp", FieldValue.serverTimestamp());
                                             notiMap.put("type","voucher");
+                                            notiMap.put("hasSeen",false);
                                             db.collection("users/" + doc.getId() + "/notifications")
                                                     .add(notiMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                                                 @Override
