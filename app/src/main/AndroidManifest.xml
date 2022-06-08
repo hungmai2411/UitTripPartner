@@ -20,6 +20,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
         <activity
+            android:name=".activities.EditPartnerProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.MainAdminActivity"
             android:exported="false" />
         <activity
@@ -27,9 +30,9 @@
             android:exported="false" />
         <activity
             android:name=".activities.MainPartnerActivity"
-            android:exported="true">
-        </activity>
-        <activity android:name=".activities.LoginActivity"
+            android:exported="true"></activity>
+        <activity
+            android:name=".activities.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -42,6 +45,10 @@
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="fullSensor"
             tools:replace="screenOrientation" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>
