@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -43,6 +44,7 @@ import vn.thanguit.toastperfect.ToastPerfect;
 public class AddVoucherActivity extends AppCompatActivity {
     Button btnAdd;
     EditText edtCodeVoucher,edtNumber,edtDescription,edtEndDate;
+    ImageButton imgChooseDate;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     DatePickerDialog datePickerDialog;
     Toolbar toolbar;
@@ -63,8 +65,9 @@ public class AddVoucherActivity extends AppCompatActivity {
         edtNumber = findViewById(R.id.edtNumber);
         edtDescription = findViewById(R.id.edtDescription);
         edtEndDate = findViewById(R.id.edtEndDate);
+        imgChooseDate = findViewById(R.id.btnChooseDate);
 
-        edtEndDate.setOnClickListener(new View.OnClickListener() {
+        imgChooseDate.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
