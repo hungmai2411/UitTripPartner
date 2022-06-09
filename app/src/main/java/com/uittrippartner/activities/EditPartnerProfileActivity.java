@@ -44,7 +44,7 @@ public class EditPartnerProfileActivity extends AppCompatActivity {
     ImageView btnAdd, imgAvatar;
     Uri avatarUri;
     EditText edtName, edtEmail, edtPhonenumber, edtAddress, edtFacebook, edtWebsite;
-    String partnerID;
+    String partnerID, hotelID;
     FirebaseFirestore firestore;
     FirebaseStorage storage;
     StorageReference storageReference;
@@ -60,6 +60,7 @@ public class EditPartnerProfileActivity extends AppCompatActivity {
         firestore = FirebaseFirestore.getInstance();
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
+
 
         btnAdd = (ImageView) findViewById(R.id.imgAdd);
         imgAvatar = (ImageView) findViewById(R.id.imgAvatar);
@@ -128,6 +129,7 @@ public class EditPartnerProfileActivity extends AppCompatActivity {
                         String fb = task.getResult().getString("facebook");
                         String avatar = task.getResult().getString("avatar");
                         String website = task.getResult().getString("website");
+                        hotelID = task.getResult().getString("idHotel");
 
                         edtName.setText(name);
                         edtEmail.setText(email);
@@ -204,6 +206,23 @@ public class EditPartnerProfileActivity extends AppCompatActivity {
             public void onFailure(@NonNull Exception e) {
                 pd.dismiss();
                 ToastPerfect.makeText(EditPartnerProfileActivity.this, ToastPerfect.ERROR, "Failed to update information", ToastPerfect.BOTTOM, ToastPerfect.LENGTH_SHORT).show();
+            }
+        });
+
+        //Update Hotel's Information
+        HashMap<String, Object> editHotel = new HashMap<>();
+        editHotel.put("name", name);
+        editHotel.put("phone", phonenumber);
+        editHotel.put("fullAddress", address);
+        firestore.collection("Hotels").document(hotelID).update(editHotel).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                finish();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                ToastPerfect.makeText(EditPartnerProfileActivity.this, ToastPerfect.ERROR, "Failed to update hotel's information", ToastPerfect.BOTTOM, ToastPerfect.LENGTH_SHORT).show();
             }
         });
     }

@@ -9,37 +9,22 @@
         android:layout_height="match_parent"
         tools:context=".activities.EditPartnerProfileActivity"
         android:orientation="vertical">
-        <LinearLayout
-            android:weightSum="2"
+        <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <LinearLayout
-                android:layout_weight="1.2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <ImageButton
-                    android:layout_marginLeft="17dp"
-                    android:layout_marginTop="30dp"
-                    android:background="@color/background"
-                    android:src="@drawable/ic_action_back"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:layout_marginTop="25dp"
-                    android:textSize="25sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/buenard_bold"
-                    android:text="Profile" />
-            </LinearLayout>
-        </LinearLayout>
+            android:layout_height="wrap_content">
+            <ImageButton
+                android:src="@drawable/ic_action_back"
+                android:background="@color/background"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:fontFamily="@font/buenard_bold"
+                android:textSize="25sp"
+                android:text="Profile"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </androidx.appcompat.widget.Toolbar>
         <RelativeLayout
             android:id="@+id/imgCover"
             android:layout_marginTop="10dp"
