@@ -10,11 +10,13 @@ import android.view.MenuItem;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.uittrippartner.R;
+import com.uittrippartner.fragments.BannerFragment;
 import com.uittrippartner.fragments.BookingPartnerFragment;
 import com.uittrippartner.fragments.ParticipantFragment;
 import com.uittrippartner.fragments.PartnerFragment;
 import com.uittrippartner.fragments.RoomFragment;
 import com.uittrippartner.fragments.StatisticFragment;
+import com.uittrippartner.fragments.VoucherFragment;
 
 public class MainAdminActivity extends AppCompatActivity {
 
@@ -37,6 +39,12 @@ public class MainAdminActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
                     case R.id.pageParticipants:
                         fragment = new ParticipantFragment();
+                        break;
+                    case R.id.pageBanners:
+                        fragment = new BannerFragment();
+                        break;
+                    case R.id.pageVouchers:
+                        fragment = new VoucherFragment();
                         break;
                 }
 
