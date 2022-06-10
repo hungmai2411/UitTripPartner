@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="Tạo banners" />
+            android:text="Quản lý banners" />
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -28,5 +28,11 @@
         android:layout_width="match_parent"
         android:layout_height="3dp"
         android:background="@drawable/toolbar_dropshadow" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/rcvBanners"/>
 
 </LinearLayout>
