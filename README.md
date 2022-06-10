@@ -1,27 +1,29 @@
-# Uit Trip
-Uit Trip là ứng dụng giúp bạn đặt phòng hotel theo ngày . Ứng dụng  được  lấy ý  tưởng  từ các ứng dụng khác trên thị trường như Go2joy, Vntrip,..
+# Uit Trip Partner
+Uit Trip Partner là ứng dụng giúp các khách sạn có thể liên kết với Uit Trip và Admin có thể quản lí 
 ## Chức năng
-Ứng dụng này dành cho phía người dùng cuối:
-- Tìm kiếm khách sạn theo các tỉnh thành ở Việt  Nam
-- Lọc khách sạn, sắp xếp khách sạn
-- Đặt phòng 
-- Xem lịch sử đặt phòng
-- Lưu các khách sạn yêu thích
-- Tuỳ chọn ngôn ngữ (Anh, Việt)
-- Xem các voucher mình sở hữu
-- Xem thông báo 
+Phía đối tác:
+- Thêm sửa xoá cập nhật phòng trong khách sạn
+- Xem thống kê user đặt phòng theo ngày
+- Xem chi tiết đặt phòng
+- Quét QR mã đặt phòng của User
 
-Ứng dụng dành cho phía đối tác và admin
-- [https://github.com/hungmai2411/UitTripPartner]
+Phía Admin
+- Xem danh sách User và đối tác
+- Tạo các voucher cho user
+- Tạo banner
 
 ## Công nghệ
-UitTrip là ứng dụng được viết bằng Java  và sử dụng Firebase làm database và một số thư viện hỗ trợ UI
+UitTripPartner là ứng dụng được viết bằng Java và sử dụng Firebase làm database và một số thư viện hỗ trợ UI
 
 ## Một vài hình ảnh demo
 
 ## Installation
 Cài đặt Android Studio
 
+Download source code bằng câu lệnh:
+```sh
+git clone https://github.com/hungmai2411/UitTripPartner.git
+```
 ## License
 MIT
 
