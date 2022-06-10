@@ -148,6 +148,14 @@ public class AddVoucherActivity extends AppCompatActivity {
                                                     dismissDialog();
                                                 }
                                             });
+
+                                            db.collection("users/" + doc.getId() + "/vouchers")
+                                                    .add(hashMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<DocumentReference> task) {
+                                                }
+                                            });
+
                                         }
                                     }
                                 });
