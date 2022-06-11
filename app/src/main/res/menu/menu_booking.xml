@@ -5,4 +5,11 @@
         android:icon="@drawable/barcode_scanner"
         app:showAsAction="always"
         android:title="Scan" />
+    <item
+        android:id="@+id/icNotify"
+        android:icon="@drawable/notification"
+        app:showAsAction="always"
+        android:title="Notification" />
+
+
 </menu>
