@@ -33,6 +33,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.journeyapps.barcodescanner.ScanContract;
@@ -40,6 +41,7 @@ import com.journeyapps.barcodescanner.ScanOptions;
 import com.uittrippartner.R;
 import com.uittrippartner.activities.BookingDetailActivity;
 import com.uittrippartner.activities.MainPartnerActivity;
+import com.uittrippartner.activities.NotificationActivity;
 import com.uittrippartner.adapter.BookingPartnerAdapter;
 import com.uittrippartner.hotel.Booking;
 
@@ -144,6 +146,7 @@ public class BookingPartnerFragment extends Fragment {
         bookingList = new ArrayList<>();
 
         db.collection("Hotels/" + 1428 + "/booked")
+                .orderBy("timestamp", Query.Direction.DESCENDING)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -212,7 +215,8 @@ public class BookingPartnerFragment extends Fragment {
 
         if (item.getItemId() == R.id.icScan) {
             barcodeLauncher.launch(new ScanOptions());
-        }
+        }else if(item.getItemId() == R.id.icNotify)
+            startActivity(new Intent(getContext(), NotificationActivity.class));
 
         return true;
     }
