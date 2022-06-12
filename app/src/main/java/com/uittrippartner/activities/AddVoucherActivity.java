@@ -125,7 +125,7 @@ public class AddVoucherActivity extends AppCompatActivity {
                                                         db.collection("vouchers").add(hashMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                                                             @Override
                                                             public void onComplete(@NonNull Task<DocumentReference> task) {
-                                                                ToastPerfect.makeText(AddVoucherActivity.this,"Thêm thành công", Toast.LENGTH_SHORT);
+                                                                ToastPerfect.makeText(AddVoucherActivity.this,"Thêm voucher thành công", Toast.LENGTH_SHORT);
                                                             }
                                                         });
                                                     }

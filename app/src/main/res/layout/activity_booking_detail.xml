@@ -181,22 +181,5 @@
                 android:id="@+id/txtSale"
                 android:text="0"/>
         </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/relative"
-            android:layout_marginTop="30dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <Button
-                android:id="@+id/btnCancel"
-                android:layout_width="160dp"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:background="@drawable/rounded_corner_button"
-                android:text="Cancel Booking"
-                android:textAllCaps="false"
-                app:backgroundTint="@color/primary" />
-        </RelativeLayout>
     </LinearLayout>
 </LinearLayout>
