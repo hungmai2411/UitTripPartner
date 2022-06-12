@@ -44,6 +44,7 @@ import com.uittrippartner.hotel.room.Photo;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -97,29 +98,33 @@ public class AddBannerActivity extends AppCompatActivity {
 //                    }
 //                }, 5000);
 
-                for (String s : listTmp) {
-                    if (s != null) {
-                        Uri uri = Uri.parse(s);
+                if(listTmp.isEmpty()){
+                    ToastPerfect.makeText(AddBannerActivity.this, ToastPerfect.BOTTOM, "Chưa chọn hình ảnh", ToastPerfect.WARNING, Toast.LENGTH_SHORT).show();
+                    dismissDialog();
+                }else{
+                    for (String s : listTmp) {
+                        if (s != null) {
+                            Uri uri = Uri.parse(s);
 
-                        StorageReference riversRef = storageReference.child("banners/" + uri);
+                            StorageReference riversRef = storageReference.child("banners/" + uri);
 
-                        riversRef.putFile(uri)
-                                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                    @Override
-                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                        riversRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                            @Override
-                                            public void onSuccess(Uri uri) {
-                                                String s = uri.toString();
+                            riversRef.putFile(uri)
+                                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                        @Override
+                                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                            riversRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                @Override
+                                                public void onSuccess(Uri uri) {
+                                                    String s = uri.toString();
 
-                                                saveToFireStore(s);
-                                            }
-                                        });
-                                    }
-                                });
+                                                    saveToFireStore(s);
+                                                }
+                                            });
+                                        }
+                                    });
+                        }
                     }
                 }
-
             }
         });
 
@@ -139,14 +144,16 @@ public class AddBannerActivity extends AppCompatActivity {
     }
 
     private void saveToFireStore(String s) {
+        String imageID = String.format(Locale.US, "%d.jpeg", System.currentTimeMillis());
         HashMap<String, Object> map = new HashMap<>();
         map.put("image", s);
+        map.put("imageID", imageID);
 
-        db.collection("banners").add(map).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+        db.collection("banners").document(imageID).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
-            public void onComplete(@NonNull Task<DocumentReference> task) {
+            public void onComplete(@NonNull Task<Void> task) {
                 dismissDialog();
-                ToastPerfect.makeText(AddBannerActivity.this, "Thêm banner thành công", Toast.LENGTH_SHORT).show();
+                ToastPerfect.makeText(AddBannerActivity.this, ToastPerfect.BOTTOM, "Thêm banner thành công", ToastPerfect.SUCCESS, Toast.LENGTH_SHORT).show();
             }
         });
     }

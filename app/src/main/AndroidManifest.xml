@@ -54,19 +54,16 @@
             android:exported="false" />
         <activity
             android:name=".activities.MainPartnerActivity"
+
             android:exported="true" />
+
         <activity
             android:name=".activities.AddVoucherActivity"
             android:exported="true" />
         <activity
             android:name=".activities.LoginActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:exported="true"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <activity android:name=".activities.BookingDetailActivity" />
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"

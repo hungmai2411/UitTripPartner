@@ -4,13 +4,13 @@
     <item
         android:id="@+id/pageParticipants"
         android:enabled="true"
-        android:icon="@drawable/ic_people"
+        android:icon="@drawable/ic_management"
         android:title="Participants"/>
 
     <item
         android:id="@+id/pageBanners"
         android:enabled="true"
-        android:icon="@drawable/advertisement"
+        android:icon="@drawable/ic_banner32"
         android:title="Banners"/>
 
     <item
@@ -18,4 +18,10 @@
         android:enabled="true"
         android:icon="@drawable/coupon"
         android:title="Vouchers"/>
+
+    <item
+        android:id="@+id/btnLogOut"
+        android:enabled="true"
+        android:icon="@drawable/ic_logout2"
+        android:title="Log out"/>
 </menu>
