@@ -66,4 +66,6 @@ dependencies {
     implementation 'io.github.thang-uit:toastperfectlibrary:1.0.1'
     implementation 'com.mikhaellopez:circularimageview:3.2.0'
     implementation 'com.vipulasri:ticketview:1.1.2'
+    implementation 'com.google.firebase:firebase-messaging:23.0.5'
+
 }

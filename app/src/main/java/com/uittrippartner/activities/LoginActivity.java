@@ -19,14 +19,17 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.uittrippartner.R;
 
-public class LoginActivity extends AppCompatActivity {
+import java.util.HashMap;
 
+public class LoginActivity extends AppCompatActivity {
     TextInputEditText txtEmail,txtPass;
     Button btnSignIn;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +39,19 @@ public class LoginActivity extends AppCompatActivity {
         txtEmail = findViewById(R.id.txtEmail);
         txtPass = findViewById(R.id.txtPass);
         btnSignIn = findViewById(R.id.btnSignIn);
+
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            return;
+                        }
+
+                        token = task.getResult();
+                    }
+                });
+
 
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,6 +70,18 @@ public class LoginActivity extends AppCompatActivity {
                                                     String role = task.getResult().getString("role");
 
                                                     updateUI(role);
+
+                                                    HashMap<String,Object> hashMap = new HashMap<>();
+                                                    hashMap.put("token",token);
+
+                                                    db.collection("partners").document(user.getUid())
+                                                            .update(hashMap)
+                                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                @Override
+                                                                public void onComplete(@NonNull Task<Void> task) {
+
+                                                                }
+                                                            });
                                                 }
                                             });
 
@@ -64,6 +92,23 @@ public class LoginActivity extends AppCompatActivity {
                         });
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if(mAuth.getCurrentUser() != null){
+            db.collection("partners").document(mAuth.getUid()).get()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            String role = task.getResult().getString("role");
+
+                            updateUI(role);
+                        }
+                    });
+        }
     }
 
     private void updateUI(String role) {

@@ -13,12 +13,33 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
+        <activity
+            android:name=".activities.NotificationActivity"
+            android:exported="false" />
+
+        <service
+            android:name=".fcm.MyFirebaseMessagingService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+
+            <meta-data
+                android:name="com.google.firebase.messaging.default_notification_icon"
+                android:resource="@drawable/applogo" />
+            <meta-data
+                android:name="com.google.firebase.messaging.default_notification_color"
+                android:resource="@color/black" />
+        </service>
+
         <activity
             android:name=".activities.AddBannerActivity"
             android:exported="false" />
@@ -27,25 +48,22 @@
             android:exported="false" />
         <activity
             android:name=".activities.MainAdminActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".activities.AddRoomActivity"
             android:exported="false" />
         <activity
             android:name=".activities.MainPartnerActivity"
-            android:exported="true"/>
+
+            android:exported="true" />
+
         <activity
             android:name=".activities.AddVoucherActivity"
             android:exported="true" />
         <activity
             android:name=".activities.LoginActivity"
             android:exported="true"/>
+
         <activity android:name=".activities.BookingDetailActivity" />
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"

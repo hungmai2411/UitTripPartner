@@ -232,4 +232,21 @@
             android:src="@drawable/ic_gmail48" />
     </LinearLayout>
 
+    <Button
+        android:id="@+id/btnSignOut"
+        android:layout_marginTop="15dp"
+        android:shadowColor="@color/gray"
+        android:shadowDy="4"
+        android:shadowDx="4"
+        android:shadowRadius="8"
+        android:textColor="#FF603A"
+        android:drawableLeft="@drawable/logout"
+        android:textAllCaps="false"
+        android:text="Đăng xuất"
+        app:cornerRadius="20dp"
+        android:backgroundTint="@color/white"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
 </LinearLayout>

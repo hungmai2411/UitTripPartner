@@ -41,6 +41,7 @@ public class PartnerProfileFragment extends Fragment {
     ImageView imgProfile;
     ImageButton btnFacebook, btnGmail, btnWeb;
     String fbLink, website;
+    Button btnSignOut;
 
     public PartnerProfileFragment() {
         // Required empty public constructor
@@ -91,6 +92,7 @@ public class PartnerProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        btnSignOut = view.findViewById(R.id.btnSignOut);
         txtCompanyName = view.findViewById(R.id.txtCompanyName);
         txtCompanyEmail = view.findViewById(R.id.txtCompanyEmail);
         txtName = view.findViewById(R.id.txtName);
@@ -102,6 +104,12 @@ public class PartnerProfileFragment extends Fragment {
         btnGmail = view.findViewById(R.id.btnGmail);
         btnWeb = view.findViewById(R.id.btnWeb);
 
+        btnSignOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseAuth.getInstance().signOut();
+            }
+        });
         btnFacebook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
