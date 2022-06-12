@@ -94,6 +94,23 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if(mAuth.getCurrentUser() != null){
+            db.collection("partners").document(mAuth.getUid()).get()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            String role = task.getResult().getString("role");
+
+                            updateUI(role);
+                        }
+                    });
+        }
+    }
+
     private void updateUI(String role) {
         if(role.equals("partner")){
             startActivity(new Intent(LoginActivity.this,MainPartnerActivity.class));

@@ -5,6 +5,15 @@ import java.util.Date;
 public class Notification {
     private Date date;
     private String type;
+    private String typeRoom;
+
+    public String getTypeRoom() {
+        return typeRoom;
+    }
+
+    public void setTypeRoom(String typeRoom) {
+        this.typeRoom = typeRoom;
+    }
 
     public Date getDate() {
         return date;

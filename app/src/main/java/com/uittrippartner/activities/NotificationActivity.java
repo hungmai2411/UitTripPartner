@@ -67,7 +67,7 @@ public class NotificationActivity extends AppCompatActivity {
             uid = mAuth.getUid();
         }
 
-        db.collection("users/" + uid + "/notifications")
+        db.collection("partners/" + uid + "/notifications")
                 .orderBy("timestamp", Query.Direction.DESCENDING)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
@@ -86,6 +86,7 @@ public class NotificationActivity extends AppCompatActivity {
                             Notification notification = new Notification();
                             notification.setDate(date);
                             notification.setType(doc.getString("type"));
+                            notification.setTypeRoom(doc.getString("room"));
 
                             switch (dc.getType()) {
                                 case ADDED:

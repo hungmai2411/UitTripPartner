@@ -44,6 +44,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         String strDate = dateFormat.format(mListNotification.get(position).getDate());
 
         holder.txtDate.setText(strDate);
+        holder.txtTypeRoom.setText("Có 1 khách hàng đặt phòng " + mListNotification.get(position).getTypeRoom());
     }
 
     @Override
@@ -57,7 +58,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     public class NotificationViewHolder extends RecyclerView.ViewHolder{
 
-        TextView txtDate;
+        TextView txtDate,txtTypeRoom;
         ImageView imgIcon;
         TextView txtDescription;
 
@@ -65,6 +66,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         public NotificationViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            txtTypeRoom = itemView.findViewById(R.id.txtTypeRoom);
             txtDescription = itemView.findViewById(R.id.txtDescription);
             imgIcon = itemView.findViewById(R.id.imgIcon);
             txtDate = itemView.findViewById(R.id.txtDate);
