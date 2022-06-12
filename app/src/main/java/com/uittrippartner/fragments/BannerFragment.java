@@ -1,6 +1,8 @@
 package com.uittrippartner.fragments;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,14 +24,11 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -39,37 +38,31 @@ import com.gun0912.tedpermission.normal.TedPermission;
 import com.uittrippartner.IClickItemBannerListener;
 import com.uittrippartner.R;
 import com.uittrippartner.activities.AddBannerActivity;
-import com.uittrippartner.activities.AddRoomActivity;
-import com.uittrippartner.activities.AddVoucherActivity;
+import com.uittrippartner.activities.LoginActivity;
 import com.uittrippartner.activities.MainAdminActivity;
 import com.uittrippartner.adapter.BannerAdapter;
 import com.uittrippartner.adapter.PhotoAdapter;
-import com.uittrippartner.adapter.VoucherAdapter;
 import com.uittrippartner.hotel.Banner;
-import com.uittrippartner.hotel.Voucher;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import gun0912.tedbottompicker.TedBottomPicker;
 import gun0912.tedbottompicker.TedBottomSheetDialogFragment;
-import vn.thanguit.toastperfect.ToastPerfect;
 
 public class BannerFragment extends Fragment {
 
     Toolbar toolbar;
     RecyclerView rcvBanners;
-    BannerAdapter bannerAdapter;
-    List<Banner> bannerList;
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    List<String> listImg = new ArrayList<>();
+    BannerAdapter bannerAdapter, bannerAdapterNew;
+    List<Banner> bannerList, bannerListNew;
+    FirebaseFirestore db;
+    List<String> listImg ;
     PhotoAdapter photoAdapter;
     FirebaseStorage storage;
     StorageReference storageReference;
+    String url;
 
     public BannerFragment() {
         // Required empty public constructor
@@ -85,7 +78,9 @@ public class BannerFragment extends Fragment {
         photoAdapter = new PhotoAdapter(getContext());
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReferenceFromUrl("gs://travel-81548.appspot.com");
-
+        db = FirebaseFirestore.getInstance();
+        bannerListNew = new ArrayList<>();
+        listImg = new ArrayList<>();
     }
 
     @Override
@@ -106,7 +101,7 @@ public class BannerFragment extends Fragment {
         rcvBanners = view.findViewById(R.id.rcvBanners);
         bannerAdapter = new BannerAdapter(getContext(), new IClickItemBannerListener() {
             @Override
-            public void onClickItemBanner(Banner banner, int position, String url) {
+            public void onClickItemBanner(Banner banner, int position) {
                 PopupMenu popupMenu = new PopupMenu(getContext(), rcvBanners.getChildAt(position));
                 popupMenu.inflate(R.menu.menu_banner);
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -115,17 +110,15 @@ public class BannerFragment extends Fragment {
                         switch (menuItem.getItemId()) {
                             case R.id.itemEditBanner:
                             {
-                                requestPermission();
-                                saveToStorage(url);
+                                requestPermission(bannerList.get(position).getImageID());
                                 break;
                             }
                             case R.id.itemDeleteBanner:
                             {
+                                deleteBanner(position);
                                 break;
                             }
-
                         }
-
                         return false;
                     }
                 });
@@ -140,6 +133,7 @@ public class BannerFragment extends Fragment {
                 for (DocumentSnapshot doc : task.getResult()) {
                     Banner banner = new Banner();
                     banner.setImage(doc.getString("image"));
+                    banner.setImageID(doc.getString("imageID"));
                     bannerList.add(banner);
                 }
                 bannerAdapter.notifyDataSetChanged();
@@ -169,11 +163,11 @@ public class BannerFragment extends Fragment {
         return true;
     }
 
-    private void requestPermission() {
+    private void requestPermission(String id) {
         PermissionListener permissionlistener = new PermissionListener() {
             @Override
             public void onPermissionGranted() {
-                selectImagesFromGallery();
+                selectImagesFromGallery(id);
             }
 
             @Override
@@ -189,7 +183,7 @@ public class BannerFragment extends Fragment {
                 .check();
     }
 
-    private void selectImagesFromGallery() {
+    private void selectImagesFromGallery(String id) {
         TedBottomPicker.with(this.getActivity())
                 .setPeekHeight(1600)
                 .showTitle(false)
@@ -200,80 +194,74 @@ public class BannerFragment extends Fragment {
                     public void onImagesSelected(List<Uri> uriList) {
                         if (uriList != null && !uriList.isEmpty()) {
                             for (Uri uri : uriList) {
-                                listImg.add(uri.toString());
+                                String s = uri.toString();
+                                listImg.add(s);
                             }
                             photoAdapter.addData(listImg);
+
+                            for (String s : listImg) {
+                                if (s != null) {
+                                    Uri uri = Uri.parse(s);
+
+                                    StorageReference riversRef = storageReference.child("banners/" + uri);
+
+                                    riversRef.putFile(uri)
+                                            .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                                @Override
+                                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                                    riversRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                        @Override
+                                                        public void onSuccess(Uri uri) {
+                                                            url = uri.toString();
+                                                            HashMap<String, Object> map = new HashMap<>();
+                                                            map.put("image", url);
+
+                                                            db.collection("banners").document(id).update(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                @Override
+                                                                public void onComplete(@NonNull Task<Void> task) {
+                                                                    Toast.makeText(getContext(), "Edit banner successfully", Toast.LENGTH_SHORT).show();
+                                                                    refresh();
+                                                                }
+                                                            });
+                                                        }
+                                                    });
+                                                }
+                                            });
+                                }
+                            }
                         }
                     }
                 });
     }
-
-    private void saveToStorage(String imageURL) {
-        for (String s : listImg) {
-            if (s != null) {
-                Uri uri = Uri.parse(s);
-
-                StorageReference riversRef = storageReference.child("banners/" + uri);
-
-                riversRef.putFile(uri)
-                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                riversRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                    @Override
-                                    public void onSuccess(Uri uri) {
-                                        String s = uri.toString();
-
-                                        saveToFireStore(s, imageURL);
-                                    }
-                                });
-                            }
-                        });
-            }
-        }
+    private void refresh(){
+        Fragment banner = new BannerFragment();
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_container, banner).commit();
     }
+    
+    private void deleteBanner(int position){
+        String id = bannerList.get(position).getImageID();
 
-    private void saveToFireStore(String uri, String url) {
-        String url1 = url;
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("image", uri);
-
-        QuerySnapshot querySnapshot = db.collection("banners").whereEqualTo("image", url).get().getResult();
-        for(DocumentSnapshot documentSnapshot : querySnapshot.getDocuments()){
-            String imageID = documentSnapshot.getId();
-
-        boolean doc = db.collection("banners").document().getId().equals(url);
-
-            db.collection("banners").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    for (DocumentSnapshot doc : task.getResult()) {
-                        if(doc.getId().equals(imageID)){
-                            db.collection("banners").document(imageID).update(map).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void unused) {
-                                    Toast.makeText(getContext(), "Successfully", Toast.LENGTH_SHORT).show();
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
+        AlertDialog.Builder alertdialog = new AlertDialog.Builder(getContext());
+        alertdialog.setTitle("Thông báo");
+        alertdialog.setMessage("Bạn có chắc chắn muốn xoá không?");
+        alertdialog.setPositiveButton("Có", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                db.collection("banners").document(id).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        Toast.makeText(getContext(), "Delete banner successfully", Toast.LENGTH_SHORT).show();
                     }
-
-                }
-            });
-        }
-//        db.collection("banners").document(imageID).update(map).addOnSuccessListener(new OnSuccessListener<Void>() {
-//            @Override
-//            public void onSuccess(Void unused) {
-//                Toast.makeText(getContext(), "Update successfully", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-
-
+                });
+            }
+        });
+        alertdialog.setNegativeButton("Không", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                return;
+            }
+        });
+        alertdialog.show();
     }
 
 }

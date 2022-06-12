@@ -26,6 +26,9 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
         mListUri = list;
         notifyDataSetChanged();
     }
+    public List<String> getData(){
+        return mListUri;
+    }
 
     @NonNull
     @Override

@@ -37,6 +37,9 @@ public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.BannerView
         this.mContext = mContext;
         this.iClickItemBannerListener = listener;
     }
+    public BannerAdapter(Context context){
+        this.mContext = context;
+    }
 
     public void setList(List<Banner> list){
         mList = list;
@@ -60,25 +63,7 @@ public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.BannerView
         holder.imgBanner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                PopupMenu popupMenu = new PopupMenu(mContext, holder.imgBanner);
-//                popupMenu.inflate(R.menu.menu_banner);
-//                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-//                    @Override
-//                    public boolean onMenuItemClick(MenuItem menuItem) {
-//                        switch (menuItem.getItemId()) {
-//                            case R.id.itemEditBanner:
-//                                //handle menu1 click
-//                                break;
-//                            case R.id.itemDeleteBanner:
-//
-//                                break;
-//                        }
-//
-//                        return false;
-//                    }
-//                });
-//                popupMenu.show();
-                iClickItemBannerListener.onClickItemBanner(banner, holder.getAdapterPosition(), mList.get(position).getImage());
+                iClickItemBannerListener.onClickItemBanner(banner, holder.getAdapterPosition());
             }
         });
     }
