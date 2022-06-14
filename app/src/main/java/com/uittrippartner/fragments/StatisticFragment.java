@@ -52,7 +52,7 @@ public class StatisticFragment extends Fragment {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     Long startDate, endDate;
     TextView txtDate;
-    float numberBooked, numberCancelled;
+    float numberBooked, numberCancelled, numberSuccessfully;
 
     public StatisticFragment() {
         // Required empty public constructor
@@ -114,12 +114,14 @@ public class StatisticFragment extends Fragment {
                                 if (end.equals(endTmp) && start.equals(startTmp)) {
                                     if (document.getString("status").equals("Booked"))
                                         numberBooked++;
-                                    else
+                                    else if(document.getString("status").equals("Cancelled"))
                                         numberCancelled++;
+                                    else
+                                        numberSuccessfully++;
                                 }
                             }
 
-                            setChart(numberBooked, numberCancelled);
+                            setChart(numberBooked, numberCancelled,numberSuccessfully);
                         } else {
                         }
                     }
@@ -156,6 +158,7 @@ public class StatisticFragment extends Fragment {
 
                         numberBooked = 0;
                         numberCancelled = 0;
+                        numberSuccessfully = 0;
 
                         db.collection("Hotels/" + 1428 + "/booked")
                                 .whereEqualTo("startDate", startDate)
@@ -171,12 +174,14 @@ public class StatisticFragment extends Fragment {
                                                 if (end.equals(endTmp)) {
                                                     if (document.getString("status").equals("Booked"))
                                                         numberBooked++;
-                                                    else
+                                                    else if(document.getString("status").equals("Cancelled"))
                                                         numberCancelled++;
+                                                    else
+                                                        numberSuccessfully++;
                                                 }
                                             }
 
-                                            setChart(numberBooked, numberCancelled);
+                                            setChart(numberBooked, numberCancelled,numberSuccessfully);
                                         } else {
                                         }
                                     }
@@ -189,7 +194,7 @@ public class StatisticFragment extends Fragment {
 
     }
 
-    void setChart(float booked, float cancelled) {
+    void setChart(float booked, float cancelled, float succeed) {
         ArrayList<BarEntry> barEntries = new ArrayList<>();
 
         BarEntry barEntryBooked = new BarEntry(0, booked);
@@ -198,7 +203,10 @@ public class StatisticFragment extends Fragment {
         BarEntry barEntryCancelled = new BarEntry(1, cancelled);
         barEntries.add(barEntryCancelled);
 
-        String[] labels = new String[]{"Đặt phòng", "Huỷ phòng"};
+        BarEntry barEntrySucced = new BarEntry(2, succeed);
+        barEntries.add(barEntrySucced);
+
+        String[] labels = new String[]{"Đặt phòng", "Huỷ phòng","Thành công"};
         XAxis xAxis = barChart.getXAxis();
         xAxis.setValueFormatter(new IndexAxisValueFormatter(labels));
         xAxis.setGranularity(1f);
@@ -211,6 +219,7 @@ public class StatisticFragment extends Fragment {
 
         listColor.add(getResources().getColor(R.color.booked_text));
         listColor.add(getResources().getColor(R.color.cancelled_text));
+        listColor.add(getResources().getColor(R.color.primary));
 
         barDataSet.setColors(listColor);
 

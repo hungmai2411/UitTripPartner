@@ -48,7 +48,6 @@ import gun0912.tedbottompicker.TedBottomSheetDialogFragment;
 import gun0912.tedbottompicker.TedRxBottomPicker;
 
 public class AddRoomActivity extends AppCompatActivity {
-
     Toolbar toolbar;
     RecyclerView rcvImages;
     PhotoAdapter photoAdapter;
@@ -232,7 +231,7 @@ public class AddRoomActivity extends AppCompatActivity {
         map.put("photos", list);
         map.put("number", number);
 
-        db.collection("Hotels/" + 1017 + "/rooms").document(room.getId())
+        db.collection("Hotels/" + 1428 + "/rooms").document(room.getId())
                 .set(map)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -258,7 +257,7 @@ public class AddRoomActivity extends AppCompatActivity {
         map.put("photos", list);
         map.put("number", number);
 
-        db.collection("Hotels/" + 1017 + "/rooms").add(map).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+        db.collection("Hotels/" + 1428 + "/rooms").add(map).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
             @Override
             public void onComplete(@NonNull Task<DocumentReference> task) {
                 dismissDialog();

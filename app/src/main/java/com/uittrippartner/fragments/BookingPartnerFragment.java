@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -47,7 +48,11 @@ import com.uittrippartner.hotel.Booking;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class BookingPartnerFragment extends Fragment {
 
@@ -57,6 +62,9 @@ public class BookingPartnerFragment extends Fragment {
     FirebaseFirestore db;
     Toolbar toolbar;
     ProgressDialog progressDialog;
+    String uid;
+    FirebaseAuth mAuth;
+    ExecutorService executorService;
 
     final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new ScanContract(),
             result -> {
@@ -113,6 +121,11 @@ public class BookingPartnerFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        executorService = Executors.newSingleThreadExecutor();
+        if(mAuth.getCurrentUser() != null){
+            uid = mAuth.getUid();
+        }
     }
 
     @Override
@@ -207,17 +220,66 @@ public class BookingPartnerFragment extends Fragment {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.menu_booking, menu);
 
+        MenuItem icNotify = menu.findItem(R.id.icNotify);
+
+        db.collection("partners/" + uid + "/notifications")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot snapshots,
+                                        @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w("Notification Activity", "listen:error", e);
+                            return;
+                        }
+
+                        for (DocumentChange dc : snapshots.getDocumentChanges()) {
+                            DocumentSnapshot documentSnapshot = dc.getDocument();
+                            switch (dc.getType()) {
+                                case ADDED:
+                                    if(documentSnapshot.getBoolean("hasSeen") == false)
+                                        icNotify.setIcon(R.drawable.bell_notify);
+                                    break;
+                            }
+                        }
+                    }
+                });
+
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
         if (item.getItemId() == R.id.icScan) {
             barcodeLauncher.launch(new ScanOptions());
-        }else if(item.getItemId() == R.id.icNotify)
-            startActivity(new Intent(getContext(), NotificationActivity.class));
+        } else if (item.getItemId() == R.id.icNotify) {
+            executorService.execute(new Runnable() {
+                @Override
+                public void run() {
+                    db.collection("partners/" + uid + "/notifications")
+                            .get()
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    for(DocumentSnapshot doc: task.getResult()){
+                                        HashMap<String,Object> hashMap = new HashMap<>();
+                                        hashMap.put("hasSeen",true);
+                                        db.collection("partners/" + uid + "/notifications")
+                                                .document(doc.getId()).update(hashMap)
+                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
 
+                                                    }
+                                                });
+                                    }
+                                }
+                            });
+                }
+            });
+
+            startActivity(new Intent(getContext(), NotificationActivity.class));
+            item.setIcon(R.drawable.notification);
+        }
         return true;
     }
 }

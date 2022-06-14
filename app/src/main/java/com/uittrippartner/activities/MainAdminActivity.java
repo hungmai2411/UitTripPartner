@@ -10,10 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -32,18 +29,10 @@ public class MainAdminActivity extends AppCompatActivity {
 
     BottomNavigationView bottom_navigation;
 
-    private GoogleSignInClient gsc;
-    private GoogleSignInOptions gso;
-    GoogleSignInAccount account;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_admin);
-
-        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
-        gsc = GoogleSignIn.getClient(MainAdminActivity.this,gso);
-        account=GoogleSignIn.getLastSignedInAccount(MainAdminActivity.this);
 
         bottom_navigation = findViewById(R.id.bottom_navigation);
 
@@ -64,25 +53,15 @@ public class MainAdminActivity extends AppCompatActivity {
                     case R.id.pageVouchers:
                         fragment = new VoucherFragment();
                         break;
-                    case R.id.itemLogout:{
+                    case R.id.btnLogOut:{
                         AlertDialog.Builder alertdialog = new AlertDialog.Builder(MainAdminActivity.this);
                         alertdialog.setTitle("Thông báo");
                         alertdialog.setMessage("Bạn có chắc chắn muốn đăng xuất không?");
                         alertdialog.setPositiveButton("Có", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                if(account!=null){
-                                    gsc.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            FirebaseAuth.getInstance().signOut();
-                                            startActivity(new Intent(MainAdminActivity.this, LoginActivity.class));
-                                        }
-                                    });
-                                }else{
-                                    FirebaseAuth.getInstance().signOut();
-                                    startActivity(new Intent(MainAdminActivity.this, LoginActivity.class));
-                                }
+                                FirebaseAuth.getInstance().signOut();
+                                startActivity(new Intent(MainAdminActivity.this, LoginActivity.class));
                             }
                         });
                         alertdialog.setNegativeButton("Không", new DialogInterface.OnClickListener() {

@@ -1,9 +1,12 @@
 package com.uittrippartner.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -38,9 +41,16 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
     }
 
     @Override
-    public void onBindViewHolder(@NonNull PhotoViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull PhotoViewHolder holder, @SuppressLint("RecyclerView") int position) {
         try {
             Glide.with(mContext).load(mListUri.get(position)).into(holder.imgPhoto);
+            holder.btnDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mListUri.remove(position);
+                    notifyItemRemoved(position);
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -58,10 +68,12 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
     public class PhotoViewHolder extends RecyclerView.ViewHolder {
 
         ImageView imgPhoto;
+        ImageButton btnDelete;
 
         public PhotoViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            btnDelete = itemView.findViewById(R.id.btnDelete);
             imgPhoto = itemView.findViewById(R.id.img_photo);
         }
     }

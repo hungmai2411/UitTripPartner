@@ -67,12 +67,12 @@ public class BookingPartnerAdapter extends RecyclerView.Adapter<BookingPartnerAd
         holder.txtIdBooking.setText(bookingList.get(position).getIdBooking());
         holder.txtPhoneNumber.setText(bookingList.get(position).getPhonenumber());
 
-        if(bookingList.get(position).getStatus().equals("Booked")){
-            holder.txtStatus.setTextColor(mContext.getResources().getColor(R.color.booked_text));
-            holder.txtStatus.setBackgroundColor(mContext.getResources().getColor(R.color.booked_color));
-        }else{
+        if(bookingList.get(position).getStatus().equals("Cancelled")){
             holder.txtStatus.setTextColor(mContext.getResources().getColor(R.color.cancelled_text));
             holder.txtStatus.setBackgroundColor(mContext.getResources().getColor(R.color.cancelled_color));
+        }else{
+            holder.txtStatus.setTextColor(mContext.getResources().getColor(R.color.booked_text));
+            holder.txtStatus.setBackgroundColor(mContext.getResources().getColor(R.color.booked_color));
         }
         holder.txtStatus.setText(bookingList.get(position).getStatus());
     }
