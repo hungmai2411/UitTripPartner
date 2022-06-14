@@ -44,6 +44,7 @@ public class EditPartnerProfileActivity extends AppCompatActivity {
     ImageView btnAdd, imgAvatar;
     Uri avatarUri;
     EditText edtName, edtEmail, edtPhonenumber, edtAddress, edtFacebook, edtWebsite;
+    ImageButton btnBack;
     String partnerID, hotelID;
     FirebaseFirestore firestore;
     FirebaseStorage storage;
@@ -71,6 +72,14 @@ public class EditPartnerProfileActivity extends AppCompatActivity {
         edtFacebook = (EditText)findViewById(R.id.edtFacebook);
         edtWebsite = (EditText)findViewById(R.id.edtWebsite);
         btnUpdate = (Button)findViewById(R.id.btnUpdate);
+        btnBack = (ImageButton)findViewById(R.id.btnBack);
+
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
