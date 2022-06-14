@@ -24,6 +24,8 @@ import com.uittrippartner.R;
 
 import java.util.HashMap;
 
+import vn.thanguit.toastperfect.ToastPerfect;
+
 public class LoginActivity extends AppCompatActivity {
     TextInputEditText txtEmail,txtPass;
     Button btnSignIn;
@@ -68,7 +70,7 @@ public class LoginActivity extends AppCompatActivity {
                                                 @Override
                                                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                                     String role = task.getResult().getString("role");
-
+                                                    ToastPerfect.makeText(LoginActivity.this,"Đăng nhập thành công",Toast.LENGTH_SHORT).show();
                                                     updateUI(role);
 
                                                     HashMap<String,Object> hashMap = new HashMap<>();
@@ -86,7 +88,7 @@ public class LoginActivity extends AppCompatActivity {
                                             });
 
                                 } else {
-                                    Log.d("err","err");
+                                    Log.d("err",task.getException().getMessage());
                                 }
                             }
                         });

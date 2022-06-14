@@ -14,6 +14,16 @@ public class Booking implements Serializable {
     private String addressHotel;
     private String status;
 
+    private String idUser;
+
+    public String getIdUser() {
+        return idUser;
+    }
+
+    public void setIdUser(String idUser) {
+        this.idUser = idUser;
+    }
+
     public String getStatus() {
         return status;
     }

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -30,10 +29,10 @@
         android:background="@drawable/toolbar_dropshadow" />
 
     <LinearLayout
-        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="10dp"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -43,8 +42,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:text="Số điện thoại" />
+                android:text="Số điện thoại"
+                android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/txtPhoneNumber"
@@ -57,14 +56,15 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_marginTop="5dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:text="Mã đặt phòng"/>
+                android:text="Mã đặt phòng"
+                android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/txtIdBooking"
@@ -77,14 +77,15 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_marginTop="5dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:text="Loại phòng"/>
+                android:text="Loại phòng"
+                android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/txtTypeRoom"
@@ -97,14 +98,15 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_marginTop="5dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:text="Loại đặt phòng"/>
+                android:text="Loại đặt phòng"
+                android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/txtNumber"
@@ -117,14 +119,15 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_marginTop="5dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:text="Giờ đặt phòng"/>
+                android:text="Giờ đặt phòng"
+                android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/txtDate"
@@ -137,19 +140,19 @@
         </RelativeLayout>
 
         <View
-            android:layout_marginVertical="20dp"
-            style="@style/Divider.Horizontal"/>
+            style="@style/Divider.Horizontal"
+            android:layout_marginVertical="20dp" />
 
         <RelativeLayout
-            android:layout_marginTop="5dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:text="Tiền phòng" />
+                android:text="Tiền phòng"
+                android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/txtPrice"
@@ -162,24 +165,37 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_marginTop="5dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:textColor="@color/black"
-                android:layout_height="wrap_content"
-                android:text="Giảm giá" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:layout_alignParentRight="true"
-                android:textStyle="bold"
+                android:text="Giảm giá"
+                android:textColor="@color/black" />
+
+            <TextView
                 android:id="@+id/txtSale"
-                android:text="0"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="0"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
         </RelativeLayout>
+
+        <Button
+            android:id="@+id/btnCheckOut"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/rounded_corner_button"
+            android:text="Đã trả phòng"
+            android:textAllCaps="false"
+            app:backgroundTint="@color/primary" />
     </LinearLayout>
 </LinearLayout>

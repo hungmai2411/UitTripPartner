@@ -33,6 +33,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.uittrippartner.R;
 import com.uittrippartner.activities.EditPartnerProfileActivity;
+import com.uittrippartner.activities.LoginActivity;
 
 public class PartnerProfileFragment extends Fragment {
     FirebaseFirestore firestore;
@@ -108,6 +109,8 @@ public class PartnerProfileFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(getActivity(), LoginActivity.class));
+
             }
         });
         btnFacebook.setOnClickListener(new View.OnClickListener() {

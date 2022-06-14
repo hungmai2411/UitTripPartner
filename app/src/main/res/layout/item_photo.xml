@@ -9,7 +9,22 @@
 
     <ImageView
         android:id="@+id/img_photo"
+        android:src="@drawable/image"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:scaleType="centerCrop" />
+
+    <ImageButton
+        android:id="@+id/btnDelete"
+        android:layout_width="30dp"
+        android:layout_gravity="right"
+        android:scaleType="center"
+        android:backgroundTint="@android:color/transparent"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_close"
+        android:layout_marginTop="-4dp"
+        android:layout_marginRight="-4dp"
+        />
+
+
 </androidx.cardview.widget.CardView>
