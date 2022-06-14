@@ -3,6 +3,8 @@ package com.uittrippartner.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,6 +34,7 @@ public class LoginActivity extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
     String token;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +66,7 @@ public class LoginActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
+                                    showDialog(LoginActivity.this);
                                     FirebaseUser user = mAuth.getCurrentUser();
 
                                     db.collection("partners").document(user.getUid()).get()
@@ -70,9 +74,9 @@ public class LoginActivity extends AppCompatActivity {
                                                 @Override
                                                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                                     String role = task.getResult().getString("role");
-                                                    ToastPerfect.makeText(LoginActivity.this,"Đăng nhập thành công",Toast.LENGTH_SHORT).show();
+                                                    ToastPerfect.makeText(LoginActivity.this,ToastPerfect.SUCCESS,"Đăng nhập thành công",ToastPerfect.BOTTOM,Toast.LENGTH_SHORT).show();
                                                     updateUI(role);
-
+                                                    dismissDialog();
                                                     HashMap<String,Object> hashMap = new HashMap<>();
                                                     hashMap.put("token",token);
 
@@ -101,12 +105,13 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
 
         if(mAuth.getCurrentUser() != null){
+            showDialog(this);
             db.collection("partners").document(mAuth.getUid()).get()
                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             String role = task.getResult().getString("role");
-
+                            dismissDialog();
                             updateUI(role);
                         }
                     });
@@ -119,5 +124,18 @@ public class LoginActivity extends AppCompatActivity {
         }else{
             startActivity(new Intent(LoginActivity.this,MainAdminActivity.class));
         }
+    }
+
+    public void showDialog(Context context) {
+        //setting up progress dialog
+        progressDialog = new ProgressDialog(context);
+        progressDialog.show();
+        progressDialog.setContentView(R.layout.progress_dialog);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+    }
+
+    public void dismissDialog() {
+        progressDialog.dismiss();
     }
 }

@@ -46,6 +46,7 @@ import java.util.concurrent.Executors;
 import gun0912.tedbottompicker.TedBottomPicker;
 import gun0912.tedbottompicker.TedBottomSheetDialogFragment;
 import gun0912.tedbottompicker.TedRxBottomPicker;
+import vn.thanguit.toastperfect.ToastPerfect;
 
 public class AddRoomActivity extends AppCompatActivity {
     Toolbar toolbar;
@@ -261,7 +262,7 @@ public class AddRoomActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<DocumentReference> task) {
                 dismissDialog();
-                Toast.makeText(AddRoomActivity.this, "Thêm phòng thành công", Toast.LENGTH_SHORT).show();
+                ToastPerfect.makeText(AddRoomActivity.this,ToastPerfect.SUCCESS, "Thêm phòng thành công", ToastPerfect.BOTTOM,Toast.LENGTH_SHORT).show();
             }
         });
     }

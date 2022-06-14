@@ -91,7 +91,7 @@ public class AddVoucherActivity extends AppCompatActivity {
                 showDialog(AddVoucherActivity.this);
 
                 if(edtCodeVoucher.getText().toString().matches("") || edtNumber.getText().toString().matches("") || edtDescription.getText().toString().matches("") || edtEndDate.getText().toString().matches("")){
-                    ToastPerfect.makeText(AddVoucherActivity.this,ToastPerfect.BOTTOM,"Các trường thông tin phải được điền đầy đủ",ToastPerfect.ERROR, Toast.LENGTH_SHORT).show();
+                    ToastPerfect.makeText(AddVoucherActivity.this,ToastPerfect.ERROR,"Các trường thông tin phải được điền đầy đủ",ToastPerfect.BOTTOM, Toast.LENGTH_SHORT).show();
                     dismissDialog();
                 }else{
                     String code = edtCodeVoucher.getText().toString();
