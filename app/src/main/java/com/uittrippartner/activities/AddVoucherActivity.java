@@ -90,7 +90,6 @@ public class AddVoucherActivity extends AppCompatActivity {
             public void onClick(View view) {
                 showDialog(AddVoucherActivity.this);
 
-
                 if(edtCodeVoucher.getText().toString().matches("") || edtNumber.getText().toString().matches("") || edtDescription.getText().toString().matches("") || edtEndDate.getText().toString().matches("")){
                     ToastPerfect.makeText(AddVoucherActivity.this,ToastPerfect.BOTTOM,"Các trường thông tin phải được điền đầy đủ",ToastPerfect.ERROR, Toast.LENGTH_SHORT).show();
                     dismissDialog();
@@ -110,62 +109,78 @@ public class AddVoucherActivity extends AppCompatActivity {
                     executorService.execute(new Runnable() {
                         @Override
                         public void run() {
-                            db.collection("users").get()
+                            db.collection("vouchers")
+                                    .whereEqualTo("code",code)
+                                    .get()
                                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                         @Override
                                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                            for (DocumentSnapshot doc : task.getResult()){
-                                                Message message = new Message();
-                                                Data data = new Data();
-                                                data.setUserName("Uit Trip Notification");
-                                                data.setDescription("Bạn vừa nhận được một voucher");
-                                                message.setPriority("high");
-                                                message.setData(data);
-                                                message.setTo(doc.getString("token"));
-
-                                                Call<Message> repos = sendMessageApi.sendMessage(message);
-                                                repos.enqueue(new Callback<Message>() {
+                                            if (task.getResult().size() == 0){
+                                                db.collection("vouchers").add(hashMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                                                     @Override
-                                                    public void onResponse(Call<Message> call, Response<Message> response) {
-                                                        if (response.body() != null) {
-                                                            db.collection("vouchers").add(hashMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                                                                @Override
-                                                                public void onComplete(@NonNull Task<DocumentReference> task) {
-                                                                    ToastPerfect.makeText(AddVoucherActivity.this,"Thêm thành công", Toast.LENGTH_SHORT);
+                                                    public void onComplete(@NonNull Task<DocumentReference> task) {
+                                                        ToastPerfect.makeText(AddVoucherActivity.this,ToastPerfect.SUCCESS,"Thêm thành công",ToastPerfect.BOTTOM, Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+
+                                                db.collection("users").get()
+                                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                                for (DocumentSnapshot doc : task.getResult()){
+                                                                    Message message = new Message();
+                                                                    Data data = new Data();
+                                                                    data.setUserName("Uit Trip Notification");
+                                                                    data.setDescription("Bạn vừa nhận được một voucher");
+                                                                    message.setPriority("high");
+                                                                    message.setData(data);
+                                                                    message.setTo(doc.getString("token"));
+
+                                                                    Call<Message> repos = sendMessageApi.sendMessage(message);
+                                                                    repos.enqueue(new Callback<Message>() {
+                                                                        @Override
+                                                                        public void onResponse(Call<Message> call, Response<Message> response) {
+                                                                            if (response.body() != null) {
+
+                                                                            }
+
+                                                                        }
+
+                                                                        @Override
+                                                                        public void onFailure(Call<Message> call, Throwable t) {
+                                                                            Log.d("Confirm1Activity",t.getMessage().toString());
+                                                                        }
+                                                                    });
+
+                                                                    HashMap<String,Object> notiMap = new HashMap<>();
+                                                                    notiMap.put("timestamp", FieldValue.serverTimestamp());
+                                                                    notiMap.put("type","voucher");
+                                                                    notiMap.put("hasSeen",false);
+                                                                    db.collection("users/" + doc.getId() + "/notifications")
+                                                                            .add(notiMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                                                                        @Override
+                                                                        public void onComplete(@NonNull Task<DocumentReference> task) {
+                                                                            dismissDialog();
+                                                                        }
+                                                                    });
+
+                                                                    db.collection("users/" + doc.getId() + "/vouchers")
+                                                                            .add(hashMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                                                                        @Override
+                                                                        public void onComplete(@NonNull Task<DocumentReference> task) {
+                                                                        }
+                                                                    });
+
                                                                 }
-                                                            });
-                                                        }
-
-                                                    }
-
-                                                    @Override
-                                                    public void onFailure(Call<Message> call, Throwable t) {
-                                                        Log.d("Confirm1Activity",t.getMessage().toString());
-                                                    }
-                                                });
-
-                                                HashMap<String,Object> notiMap = new HashMap<>();
-                                                notiMap.put("timestamp", FieldValue.serverTimestamp());
-                                                notiMap.put("type","voucher");
-                                                notiMap.put("hasSeen",false);
-                                                db.collection("users/" + doc.getId() + "/notifications")
-                                                        .add(notiMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<DocumentReference> task) {
-                                                        dismissDialog();
-                                                    }
-                                                });
-
-                                                db.collection("users/" + doc.getId() + "/vouchers")
-                                                        .add(hashMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<DocumentReference> task) {
-                                                    }
-                                                });
-
+                                                            }
+                                                        });
+                                            }else{
+                                                dismissDialog();
+                                                ToastPerfect.makeText(AddVoucherActivity.this,ToastPerfect.ERROR,"Mã voucher đã tồn tại",ToastPerfect.BOTTOM, Toast.LENGTH_SHORT).show();
                                             }
                                         }
                                     });
+
                         }
                     });
                 }

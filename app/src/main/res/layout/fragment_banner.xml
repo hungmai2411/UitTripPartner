@@ -29,10 +29,29 @@
         android:layout_height="3dp"
         android:background="@drawable/toolbar_dropshadow" />
 
-    <androidx.recyclerview.widget.RecyclerView
+    <com.denzcoskun.imageslider.ImageSlider
         android:layout_marginTop="10dp"
+        android:id="@+id/image_slider"
+        android:layout_marginHorizontal="15dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/rcvBanners"/>
+        android:visibility="gone"
+        app:iss_auto_cycle="true"
+        app:iss_period="1000"
+        app:iss_delay="0"
+        android:layout_height="200dp"
+        />
+
+    <Button
+        android:id="@+id/btnAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/rounded_corner_button"
+        android:paddingHorizontal="20dp"
+        android:text="Thêm banner"
+        android:textAllCaps="false"
+        app:backgroundTint="@color/primary" />
 
 </LinearLayout>

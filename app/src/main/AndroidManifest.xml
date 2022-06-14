@@ -21,6 +21,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
         <activity
+            android:name=".activities.ReviewActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.NotificationActivity"
             android:exported="false" />
 
@@ -48,16 +51,13 @@
             android:exported="false" />
         <activity
             android:name=".activities.MainAdminActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".activities.AddRoomActivity"
             android:exported="false" />
         <activity
             android:name=".activities.MainPartnerActivity"
-
             android:exported="true" />
-
         <activity
             android:name=".activities.AddVoucherActivity"
             android:exported="true" />
@@ -70,7 +70,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".activities.BookingDetailActivity" />
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"

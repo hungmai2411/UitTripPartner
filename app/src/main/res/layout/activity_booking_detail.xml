@@ -197,5 +197,18 @@
             android:text="Đã trả phòng"
             android:textAllCaps="false"
             app:backgroundTint="@color/primary" />
+
+        <Button
+            android:id="@+id/btnViewReview"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/rounded_corner_button"
+            android:text="Xem đánh giá"
+            android:textAllCaps="false"
+            app:backgroundTint="@color/primary" />
     </LinearLayout>
 </LinearLayout>

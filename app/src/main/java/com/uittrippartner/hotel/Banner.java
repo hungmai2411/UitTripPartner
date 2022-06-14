@@ -1,22 +1,16 @@
 package com.uittrippartner.hotel;
 
-public class Banner {
-    String image;
-    String imageID;
+import java.io.Serializable;
+import java.util.List;
 
-    public String getImageID() {
-        return imageID;
+public class Banner implements Serializable {
+    List<String> images;
+
+    public List<String> getImages() {
+        return images;
     }
 
-    public void setImageID(String imageID) {
-        this.imageID = imageID;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
+    public void setImages(List<String> images) {
+        this.images = images;
     }
 }
