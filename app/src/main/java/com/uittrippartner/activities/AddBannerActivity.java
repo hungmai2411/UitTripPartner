@@ -10,6 +10,7 @@ import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,6 +22,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
@@ -37,6 +39,7 @@ import com.uittrippartner.R;
 import com.uittrippartner.RetrofitInstance;
 import com.uittrippartner.SendMessageApi;
 import com.uittrippartner.adapter.PhotoAdapter;
+import com.uittrippartner.hotel.Banner;
 import com.uittrippartner.hotel.Data;
 import com.uittrippartner.hotel.Message;
 import com.uittrippartner.hotel.room.Photo;
@@ -56,7 +59,7 @@ import retrofit2.Response;
 import vn.thanguit.toastperfect.ToastPerfect;
 
 public class AddBannerActivity extends AppCompatActivity {
-    Button btnAdd,btnSelectImages;
+    Button btnAdd, btnSelectImages;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     Toolbar toolbar;
     ExecutorService executorService;
@@ -66,11 +69,23 @@ public class AddBannerActivity extends AppCompatActivity {
     private FirebaseStorage storage;
     StorageReference storageReference;
     PhotoAdapter photoAdapter;
+    boolean hasCreated;
+    List<String> images = new ArrayList<>();
+    Banner banner;
+    String idBanner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_banner);
+
+        Intent intent = getIntent();
+
+        if (intent.getExtras() != null) {
+            hasCreated = intent.getExtras().getBoolean("hasCreated", false);
+            idBanner = intent.getExtras().getString("idBanner", "");
+            banner = (Banner) intent.getExtras().getSerializable("banner");
+        }
 
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReferenceFromUrl("gs://travel-81548.appspot.com");
@@ -85,43 +100,93 @@ public class AddBannerActivity extends AppCompatActivity {
         rcvImages.setLayoutManager(linearLayoutManager);
         rcvImages.setAdapter(photoAdapter);
 
+        if (hasCreated == true) {
+            btnAdd.setText("Cập nhật");
+            listTmp = banner.getImages();
+            photoAdapter.addData(listTmp);
+        }
+
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showDialog(AddBannerActivity.this);
-
-//                final Handler handler = new Handler(Looper.getMainLooper());
-//                handler.postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        saveToFireStore(s);
-//                    }
-//                }, 5000);
-
-                if(listTmp.isEmpty()){
-                    ToastPerfect.makeText(AddBannerActivity.this, ToastPerfect.BOTTOM, "Chưa chọn hình ảnh", ToastPerfect.WARNING, Toast.LENGTH_SHORT).show();
+                if (listTmp.isEmpty()) {
+                    ToastPerfect.makeText(AddBannerActivity.this, ToastPerfect.ERROR, "Chưa chọn hình ảnh", ToastPerfect.BOTTOM, Toast.LENGTH_SHORT).show();
                     dismissDialog();
-                }else{
-                    for (String s : listTmp) {
-                        if (s != null) {
-                            Uri uri = Uri.parse(s);
+                } else {
+                    if(!hasCreated) {
+                        for (String s : listTmp) {
+                            if (s != null) {
+                                Uri uri = Uri.parse(s);
 
-                            StorageReference riversRef = storageReference.child("banners/" + uri);
+                                StorageReference riversRef = storageReference.child("banners/" + uri);
 
-                            riversRef.putFile(uri)
-                                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                        @Override
-                                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                            riversRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                                @Override
-                                                public void onSuccess(Uri uri) {
-                                                    String s = uri.toString();
+                                riversRef.putFile(uri)
+                                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                            @Override
+                                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                                riversRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                    @Override
+                                                    public void onSuccess(Uri uri) {
+                                                        images.add(uri.toString());
 
-                                                    saveToFireStore(s);
-                                                }
-                                            });
-                                        }
-                                    });
+                                                        if (images.size() == listTmp.size()) {
+                                                            saveToFireStore(images);
+                                                        }
+                                                    }
+                                                })
+                                                        .addOnFailureListener(new OnFailureListener() {
+                                                            @Override
+                                                            public void onFailure(@NonNull Exception e) {
+                                                                Log.d("err", e.getMessage());
+                                                            }
+                                                        });
+                                            }
+                                        });
+                            }
+                        }
+                    }else{
+                        for (String s : listTmp) {
+                            if (s != null) {
+                                Uri uri = Uri.parse(s);
+
+                                if(s.contains("https://firebasestorage.googleapis.")) {
+                                    images.add(s);
+
+                                    if(images.size() == listTmp.size()){
+                                        dismissDialog();
+                                        ToastPerfect.makeText(AddBannerActivity.this,ToastPerfect.SUCCESS, "Cập nhật thành công", ToastPerfect.BOTTOM,Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    continue;
+                                }
+
+                                StorageReference riversRef = storageReference.child("banners/" + uri);
+
+                                riversRef.putFile(uri)
+                                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                            @Override
+                                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                                riversRef.getDownloadUrl()
+                                                        .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                            @Override
+                                                            public void onSuccess(Uri uri) {
+                                                                images.add(uri.toString());
+
+                                                                if (images.size() == listTmp.size()) {
+                                                                    updateToFireStore(images);
+                                                                }
+                                                            }
+                                                        })
+                                                        .addOnFailureListener(new OnFailureListener() {
+                                                            @Override
+                                                            public void onFailure(@NonNull Exception e) {
+                                                                Log.d("err", e.getMessage());
+                                                            }
+                                                        });
+                                            }
+                                        });
+                            }
                         }
                     }
                 }
@@ -143,19 +208,34 @@ public class AddBannerActivity extends AppCompatActivity {
         });
     }
 
-    private void saveToFireStore(String s) {
-        String imageID = String.format(Locale.US, "%d.jpeg", System.currentTimeMillis());
+    private void saveToFireStore(List<String> s) {
         HashMap<String, Object> map = new HashMap<>();
-        map.put("image", s);
-        map.put("imageID", imageID);
+        map.put("images", s);
 
-        db.collection("banners").document(imageID).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                dismissDialog();
-                ToastPerfect.makeText(AddBannerActivity.this, ToastPerfect.BOTTOM, "Thêm banner thành công", ToastPerfect.SUCCESS, Toast.LENGTH_SHORT).show();
-            }
-        });
+        db.collection("banners").add(map)
+                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentReference> task) {
+                        dismissDialog();
+                        ToastPerfect.makeText(AddBannerActivity.this, ToastPerfect.SUCCESS, "Thêm banner thành công", ToastPerfect.BOTTOM, Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void updateToFireStore(List<String> images) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("images", images);
+
+        db.collection("banners")
+                .document(idBanner)
+                .update(map)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        dismissDialog();
+                        ToastPerfect.makeText(AddBannerActivity.this,ToastPerfect.SUCCESS, "Cập nhật thành công",ToastPerfect.BOTTOM, Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     public void showDialog(Context context) {
@@ -201,7 +281,7 @@ public class AddBannerActivity extends AppCompatActivity {
                     @Override
                     public void onImagesSelected(List<Uri> uriList) {
                         if (uriList != null && !uriList.isEmpty()) {
-                            for (Uri uri : uriList){
+                            for (Uri uri : uriList) {
                                 listTmp.add(uri.toString());
                             }
                             photoAdapter.addData(listTmp);

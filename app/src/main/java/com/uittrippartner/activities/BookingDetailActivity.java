@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -15,10 +16,13 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.uittrippartner.HandleCurrency;
 import com.uittrippartner.R;
 import com.uittrippartner.hotel.Booking;
+import com.uittrippartner.hotel.Review;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -30,17 +34,20 @@ public class BookingDetailActivity extends AppCompatActivity {
 
     Toolbar toolbar;
     TextView txtTitle,txtPhoneNumber,txtIdBooking,txtTypeRoom, txtNumber,txtDate,txtPrice,txtSale;
-    Button btnCheckOut;
+    Button btnCheckOut,btnViewReview;
     Long endDate;
     ProgressDialog progressDialog;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     Booking booking;
+    Review review;
+    String idReview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking_detail);
 
+        btnViewReview = findViewById(R.id.btnViewReview);
         btnCheckOut = findViewById(R.id.btnCheckOut);
         txtSale = findViewById(R.id.txtSale);
         toolbar = findViewById(R.id.toolbar);
@@ -86,6 +93,39 @@ public class BookingDetailActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+
+        if(booking.getStatus().equals("Successfully")) {
+            db.collection("Hotels/" + booking.getIdHotel() + "/reviews")
+                    .whereEqualTo("idUser", booking.getIdUser())
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @SuppressLint("SetTextI18n")
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            for (DocumentSnapshot doc : task.getResult()) {
+                                if (doc.get("bookingID").equals(booking.getIdBooking())) {
+                                    review = doc.toObject(Review.class);
+                                    idReview = doc.getId();
+                                    btnViewReview.setVisibility(View.VISIBLE);
+                                }
+                            }
+                        }
+                    });
+        }
+
+        btnViewReview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent1 = new Intent(BookingDetailActivity.this,ReviewActivity.class);
+
+                Bundle bundle = new Bundle();
+                if(review != null) {
+                    bundle.putSerializable("review", review);
+                    intent1.putExtras(bundle);
+                }
+                startActivity(intent1);
+            }
+        });
 
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
