@@ -120,6 +120,7 @@ public class AddVoucherActivity extends AppCompatActivity {
                                                     @Override
                                                     public void onComplete(@NonNull Task<DocumentReference> task) {
                                                         ToastPerfect.makeText(AddVoucherActivity.this,ToastPerfect.SUCCESS,"Thêm thành công",ToastPerfect.BOTTOM, Toast.LENGTH_SHORT).show();
+                                                        Clear();
                                                     }
                                                 });
 
@@ -206,5 +207,17 @@ public class AddVoucherActivity extends AppCompatActivity {
 
     public void dismissDialog() {
         progressDialog.dismiss();
+    }
+
+    public void Clear(){
+        edtCodeVoucher.setText("");
+        edtNumber.setText("");
+        edtDescription.setText("");
+        edtEndDate.setText("");
+
+        edtCodeVoucher.clearFocus();
+        edtNumber.clearFocus();
+        edtDescription.clearFocus();
+        edtEndDate.clearFocus();
     }
 }

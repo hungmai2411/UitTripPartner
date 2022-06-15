@@ -131,90 +131,95 @@ public class AddRoomActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                String nameRoom = edtName.getText().toString();
-                String policy = edtPolicy.getText().toString();
-                String facility = edtFacility.getText().toString();
-                long price = Long.valueOf(edtPrice.getText().toString());
-                long size = Long.valueOf(edtSize.getText().toString());
-                long number = Long.valueOf(edtNumber.getText().toString());
-
-                // check cac input khac null
-
-                if (check == 0) {
-                    showDialog(AddRoomActivity.this);
-
-                    List<Photo> list = new ArrayList<>();
-
-                    final Handler handler = new Handler(Looper.getMainLooper());
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            saveToFireStore(nameRoom, policy, facility, price, size, number, list);
-                        }
-                    }, 5000);
-
-                    for (String s : listTmp) {
-                        if (s != null) {
-                            Uri uri = Uri.parse(s);
-
-                            StorageReference riversRef = storageReference.child("rooms/" + uri);
-
-                            riversRef.putFile(uri)
-                                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                        @Override
-                                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                            riversRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                                @Override
-                                                public void onSuccess(Uri uri) {
-                                                    Photo photo = new Photo();
-                                                    photo.setRoomImage(uri.toString());
-                                                    list.add(photo);
-                                                }
-                                            });
-                                        }
-                                    });
-                        }
-                    }
+                if(edtName.getText().toString().matches("") || edtPolicy.getText().toString().matches("") || edtFacility.getText().toString().matches("")
+                || edtPrice.getText().toString().matches("") || edtSize.getText().toString().matches("") || edtNumber.getText().toString().matches("")){
+                    ToastPerfect.makeText(AddRoomActivity.this,ToastPerfect.ERROR,"Các trường thông tin phải được điền đầy đủ",ToastPerfect.BOTTOM, Toast.LENGTH_SHORT).show();
                 }else{
-                    List<Photo> list = new ArrayList<>();
-                    showDialog(AddRoomActivity.this);
+                    String nameRoom = edtName.getText().toString();
+                    String policy = edtPolicy.getText().toString();
+                    String facility = edtFacility.getText().toString();
+                    long price = Long.valueOf(edtPrice.getText().toString());
+                    long size = Long.valueOf(edtSize.getText().toString());
+                    long number = Long.valueOf(edtNumber.getText().toString());
 
-                    final Handler handler = new Handler(Looper.getMainLooper());
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            updateFireStore(nameRoom, policy, facility, price, size, number, list);
+                    // check cac input khac null
+
+                    if (check == 0) {
+                        showDialog(AddRoomActivity.this);
+
+                        List<Photo> list = new ArrayList<>();
+
+                        final Handler handler = new Handler(Looper.getMainLooper());
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                saveToFireStore(nameRoom, policy, facility, price, size, number, list);
+                            }
+                        }, 5000);
+
+                        for (String s : listTmp) {
+                            if (s != null) {
+                                Uri uri = Uri.parse(s);
+
+                                StorageReference riversRef = storageReference.child("rooms/" + uri);
+
+                                riversRef.putFile(uri)
+                                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                            @Override
+                                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                                riversRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                    @Override
+                                                    public void onSuccess(Uri uri) {
+                                                        Photo photo = new Photo();
+                                                        photo.setRoomImage(uri.toString());
+                                                        list.add(photo);
+                                                    }
+                                                });
+                                            }
+                                        });
+                            }
                         }
-                    }, 5000);
+                    }else{
+                        List<Photo> list = new ArrayList<>();
+                        showDialog(AddRoomActivity.this);
 
-                    for (String s : listTmp) {
-                        if (s != null) {
-                            Uri uri = Uri.parse(s);
+                        final Handler handler = new Handler(Looper.getMainLooper());
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                updateFireStore(nameRoom, policy, facility, price, size, number, list);
+                            }
+                        }, 5000);
 
-                            StorageReference riversRef = storageReference.child("rooms/" + uri);
+                        for (String s : listTmp) {
+                            if (s != null) {
+                                Uri uri = Uri.parse(s);
 
-                            riversRef.putFile(uri)
-                                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                        @Override
-                                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                            riversRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                                @Override
-                                                public void onSuccess(Uri uri) {
-                                                    Photo photo = new Photo();
-                                                    photo.setRoomImage(uri.toString());
-                                                    list.add(photo);
-                                                }
-                                            });
-                                        }
-                                    }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.d("err",e.toString());
-                                    Photo photo = new Photo();
-                                    photo.setRoomImage(uri.toString());
-                                    list.add(photo);
-                                }
-                            });
+                                StorageReference riversRef = storageReference.child("rooms/" + uri);
+
+                                riversRef.putFile(uri)
+                                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                            @Override
+                                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                                riversRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                    @Override
+                                                    public void onSuccess(Uri uri) {
+                                                        Photo photo = new Photo();
+                                                        photo.setRoomImage(uri.toString());
+                                                        list.add(photo);
+                                                    }
+                                                });
+                                            }
+                                        }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.d("err",e.toString());
+                                        Photo photo = new Photo();
+                                        photo.setRoomImage(uri.toString());
+                                        list.add(photo);
+                                    }
+                                });
+                            }
                         }
                     }
                 }
