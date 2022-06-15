@@ -2,8 +2,8 @@ package com.uittrippartner.fragments;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,12 +12,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -50,9 +51,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
+
+import vn.thanguit.toastperfect.ToastPerfect;
 
 public class BookingPartnerFragment extends Fragment {
 
@@ -65,13 +68,16 @@ public class BookingPartnerFragment extends Fragment {
     String uid;
     FirebaseAuth mAuth;
     ExecutorService executorService;
+    LinearLayout btnFilter;
+    FilterBottomSheetFragment sortBottomSheetFragment;
+    List<Booking> tmp;
 
     final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new ScanContract(),
             result -> {
                 if (result.getContents() == null) {
-                    Toast.makeText(getContext(), "Cancelled", Toast.LENGTH_LONG).show();
+                    ToastPerfect.makeText(getContext(),ToastPerfect.WARNING, "Cancelled",ToastPerfect.BOTTOM, Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(getContext(), "Successfull", Toast.LENGTH_LONG).show();
+                    ToastPerfect.makeText(getContext(),ToastPerfect.SUCCESS, "Successfull",ToastPerfect.BOTTOM, Toast.LENGTH_LONG).show();
                     showDialog(getContext());
                     db.collection("Hotels/" + 1428 + "/booked")
                             .document(result.getContents())
@@ -138,6 +144,7 @@ public class BookingPartnerFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        btnFilter = view.findViewById(R.id.btnFilter);
         toolbar = view.findViewById(R.id.toolbar);
         ((MainPartnerActivity) getActivity()).setSupportActionBar(toolbar);
         ((MainPartnerActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -202,6 +209,32 @@ public class BookingPartnerFragment extends Fragment {
 
         bookingPartnerAdapter.addData(bookingList);
         rcvBookings.setAdapter(bookingPartnerAdapter);
+
+        btnFilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sortBottomSheetFragment = new FilterBottomSheetFragment(new FilterBottomSheetFragment.IClickItem() {
+                    @RequiresApi(api = Build.VERSION_CODES.N)
+                    @Override
+                    public void onCallBack(String status) {
+                        if(status.equals("Booked")) {
+                            tmp = new ArrayList<>();
+                            tmp = bookingList.stream().filter(t -> t.getStatus().equals(status)).collect(Collectors.toList());
+                            bookingPartnerAdapter.addData(tmp);
+                            bookingPartnerAdapter.notifyDataSetChanged();
+                        }else{
+                            tmp = new ArrayList<>();
+                            tmp = bookingList.stream().filter(t -> t.getStatus().equals(status)).collect(Collectors.toList());
+                            bookingPartnerAdapter.addData(tmp);
+                            bookingPartnerAdapter.notifyDataSetChanged();
+                            btnFilter.setBackground(getResources().getDrawable(R.drawable.custom_btn_filter));
+                        }
+                    }
+                });
+
+                sortBottomSheetFragment.show(getActivity().getSupportFragmentManager(), "");
+            }
+        });
     }
 
     private void removeBooking(String id) {
