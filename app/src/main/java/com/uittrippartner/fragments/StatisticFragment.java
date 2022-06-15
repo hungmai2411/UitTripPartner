@@ -85,16 +85,9 @@ public class StatisticFragment extends Fragment {
 
         startDate = MaterialDatePicker.todayInUtcMilliseconds();
 
-        GregorianCalendar gc = new GregorianCalendar();
-        gc.add(Calendar.DATE, 1);
-        endDate = gc.getTimeInMillis();
+        String from = DateFormat.format("dd/MM/yyyy", new Date(startDate)).toString();
 
-        Log.d("date-calender", String.valueOf(endDate) + "-" + DateFormat.format("dd/MM", new Date(endDate)).toString());
-
-        String from = DateFormat.format("dd/MM", new Date(startDate)).toString();
-        String end = DateFormat.format("dd/MM", new Date(endDate)).toString();
-
-        SpannableString content = new SpannableString(from + " - " + end);
+        SpannableString content = new SpannableString(from);
         content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
         txtDate.setText(content);
 
@@ -105,13 +98,10 @@ public class StatisticFragment extends Fragment {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                String end =  DateFormat.format("dd/MM", new Date(document.getLong("endDate"))).toString();
-                                String endTmp = DateFormat.format("dd/MM", new Date(endDate)).toString();
+                                String start =  DateFormat.format("dd/MM/yyyy", new Date(document.getLong("startDate"))).toString();
+                                String startTmp = DateFormat.format("dd/MM/yyyy", new Date(startDate)).toString();
 
-                                String start =  DateFormat.format("dd/MM", new Date(document.getLong("startDate"))).toString();
-                                String startTmp = DateFormat.format("dd/MM", new Date(startDate)).toString();
-
-                                if (end.equals(endTmp) && start.equals(startTmp)) {
+                                if (start.equals(startTmp)) {
                                     if (document.getString("status").equals("Booked"))
                                         numberBooked++;
                                     else if(document.getString("status").equals("Cancelled"))
@@ -130,29 +120,22 @@ public class StatisticFragment extends Fragment {
         txtDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MaterialDatePicker<Pair<Long, Long>> dateRangePicker =
-                        MaterialDatePicker.Builder.dateRangePicker()
+                MaterialDatePicker<Long> dateRangePicker =
+                        MaterialDatePicker.Builder.datePicker()
                                 .setSelection(
-                                        new Pair(
-                                                MaterialDatePicker.thisMonthInUtcMilliseconds(),
                                                 MaterialDatePicker.todayInUtcMilliseconds()
-                                        ))
+                                        )
                                 .setTitleText("Chọn ngày")
                                 .build();
                 dateRangePicker.show(getChildFragmentManager(), "11");
 
-                dateRangePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Pair<Long, Long>>() {
+                dateRangePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Long>() {
                     @Override
-                    public void onPositiveButtonClick(Pair<Long, Long> selection) {
-                        startDate = selection.first;
-                        endDate = selection.second;
+                    public void onPositiveButtonClick(Long selection) {
+                        startDate = selection;
 
-                        Log.d("date", String.valueOf(endDate) + "-" + DateFormat.format("dd/MM", new Date(endDate)).toString());
-
-                        String from = DateFormat.format("dd/MM", new Date(startDate)).toString();
-                        String end = DateFormat.format("dd/MM", new Date(endDate)).toString();
-
-                        SpannableString content = new SpannableString(from + " - " + end);
+                        String from = DateFormat.format("dd/MM/yyyy", new Date(startDate)).toString();
+                        SpannableString content = new SpannableString(from);
                         content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
                         txtDate.setText(content);
 
@@ -168,10 +151,6 @@ public class StatisticFragment extends Fragment {
                                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                         if (task.isSuccessful()) {
                                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                                String end =  DateFormat.format("dd/MM", new Date(document.getLong("endDate"))).toString();
-                                                String endTmp = DateFormat.format("dd/MM", new Date(endDate)).toString();
-
-                                                if (end.equals(endTmp)) {
                                                     if (document.getString("status").equals("Booked"))
                                                         numberBooked++;
                                                     else if(document.getString("status").equals("Cancelled"))
@@ -179,7 +158,7 @@ public class StatisticFragment extends Fragment {
                                                     else
                                                         numberSuccessfully++;
                                                 }
-                                            }
+
 
                                             setChart(numberBooked, numberCancelled,numberSuccessfully);
                                         } else {

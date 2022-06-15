@@ -140,7 +140,6 @@ public class RoomFragment extends Fragment {
                                             break;
                                         case REMOVED:
                                             editRoom(document.getId());
-                                            roomAdapter.notify();
                                             break;
                                     }
                                 }
