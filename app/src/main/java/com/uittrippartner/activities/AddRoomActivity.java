@@ -149,14 +149,6 @@ public class AddRoomActivity extends AppCompatActivity {
 
                         List<Photo> list = new ArrayList<>();
 
-                        final Handler handler = new Handler(Looper.getMainLooper());
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                saveToFireStore(nameRoom, policy, facility, price, size, number, list);
-                            }
-                        }, 5000);
-
                         for (String s : listTmp) {
                             if (s != null) {
                                 Uri uri = Uri.parse(s);
@@ -173,6 +165,10 @@ public class AddRoomActivity extends AppCompatActivity {
                                                         Photo photo = new Photo();
                                                         photo.setRoomImage(uri.toString());
                                                         list.add(photo);
+
+                                                        if(list.size() == listTmp.size()){
+                                                            saveToFireStore(nameRoom, policy, facility, price, size, number, list);
+                                                        }
                                                     }
                                                 });
                                             }
@@ -183,16 +179,20 @@ public class AddRoomActivity extends AppCompatActivity {
                         List<Photo> list = new ArrayList<>();
                         showDialog(AddRoomActivity.this);
 
-                        final Handler handler = new Handler(Looper.getMainLooper());
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                updateFireStore(nameRoom, policy, facility, price, size, number, list);
-                            }
-                        }, 5000);
-
                         for (String s : listTmp) {
                             if (s != null) {
+                                if(s.contains("https://firebasestorage.googleapis.")){
+                                    Photo photo = new Photo();
+                                    photo.setRoomImage(s);
+                                    list.add(photo);
+
+                                    if(list.size() == listTmp.size()){
+                                        dismissDialog();
+                                        ToastPerfect.makeText(AddRoomActivity.this,ToastPerfect.SUCCESS, "Cập nhật thành công", ToastPerfect.BOTTOM,Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    continue;
+                                }
                                 Uri uri = Uri.parse(s);
 
                                 StorageReference riversRef = storageReference.child("rooms/" + uri);
@@ -207,6 +207,10 @@ public class AddRoomActivity extends AppCompatActivity {
                                                         Photo photo = new Photo();
                                                         photo.setRoomImage(uri.toString());
                                                         list.add(photo);
+
+                                                        if(list.size() == listTmp.size()){
+                                                            updateFireStore(nameRoom, policy, facility, price, size, number, list);
+                                                        }
                                                     }
                                                 });
                                             }

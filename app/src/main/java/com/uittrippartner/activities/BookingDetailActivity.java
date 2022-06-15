@@ -33,7 +33,7 @@ import java.util.HashMap;
 public class BookingDetailActivity extends AppCompatActivity {
 
     Toolbar toolbar;
-    TextView txtTitle,txtPhoneNumber,txtIdBooking,txtTypeRoom, txtNumber,txtDate,txtPrice,txtSale;
+    TextView txtTitle,txtPhoneNumber,txtIdBooking,txtTypeRoom, txtNumber,txtDate,txtPrice,txtSale,txtStatusPayment,txtChoice;
     Button btnCheckOut,btnViewReview;
     Long endDate;
     ProgressDialog progressDialog;
@@ -47,7 +47,9 @@ public class BookingDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking_detail);
 
+        txtStatusPayment = findViewById(R.id.txtStatusPayment);
         btnViewReview = findViewById(R.id.btnViewReview);
+        txtChoice = findViewById(R.id.txtChoice);
         btnCheckOut = findViewById(R.id.btnCheckOut);
         txtSale = findViewById(R.id.txtSale);
         toolbar = findViewById(R.id.toolbar);
@@ -65,6 +67,10 @@ public class BookingDetailActivity extends AppCompatActivity {
             booking = (Booking) intent.getExtras().getSerializable("booking");
 
             txtTitle.setText(booking.getIdBooking());
+            if(booking.getPaymentStatus() != null){
+                txtStatusPayment.setText(booking.getPaymentStatus());
+            }
+            txtChoice.setText(booking.getChoice());
             txtIdBooking.setText(booking.getIdBooking());
             txtNumber.setText(String.valueOf(booking.getDaysdiff()) + " night");
             txtPrice.setText(new HandleCurrency().handle(booking.getPrice()));

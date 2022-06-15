@@ -13,7 +13,15 @@ public class Booking implements Serializable {
     private String idRoom;
     private String addressHotel;
     private String status;
+    private String paymentStatus;
 
+    public String getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public void setPaymentStatus(String paymentStatus) {
+        this.paymentStatus = paymentStatus;
+    }
     private String idUser;
 
     public String getIdUser() {
