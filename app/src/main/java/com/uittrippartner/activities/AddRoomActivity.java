@@ -247,7 +247,7 @@ public class AddRoomActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         dismissDialog();
-                        Toast.makeText(AddRoomActivity.this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
+                        ToastPerfect.makeText(AddRoomActivity.this,ToastPerfect.SUCCESS, "Cập nhật thành công",ToastPerfect.BOTTOM, Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

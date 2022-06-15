@@ -23,6 +23,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.uittrippartner.R;
 import com.uittrippartner.activities.AddRoomActivity;
@@ -80,7 +81,9 @@ public class VoucherFragment extends Fragment {
         voucherAdapter = new VoucherAdapter(getContext());
         voucherList = new ArrayList<>();
 
-        db.collection("vouchers").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collection("vouchers")
+                .orderBy("endDate", Query.Direction.DESCENDING)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 for(DocumentSnapshot doc : task.getResult()){

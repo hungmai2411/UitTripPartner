@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,11 +27,14 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.uittrippartner.HandleCurrency;
 import com.uittrippartner.R;
+import com.uittrippartner.activities.AddRoomActivity;
 import com.uittrippartner.hotel.room.Photo;
 import com.uittrippartner.hotel.room.Room;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import vn.thanguit.toastperfect.ToastPerfect;
 
 public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.RoomViewHolder> {
     private Context mContext;
@@ -82,6 +86,7 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.RoomViewHolder
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
+                                        ToastPerfect.makeText(mContext,ToastPerfect.SUCCESS, "Xoá thành công",ToastPerfect.BOTTOM, Toast.LENGTH_SHORT).show();
                                         mList.remove(holder.getAdapterPosition());
                                         notifyItemRemoved(holder.getAdapterPosition());
                                         mDialog.dismiss();
